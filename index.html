@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -26,25 +26,20 @@
             width: 100%;
             top: 0;
             z-index: 1000;
-
         }
         .container {
-		
             max-width: 800px;
             margin: 55px auto 20px auto;
-		
             padding: 0 20px;
         }
-        h1, h2 , h3{
-
+        h1, h2, h3 {
             text-align: center;
         }
         p {
-		text-align: center;
+            text-align: center;
             line-height: 1.2;
         }
         .services {
-
             margin-top: 60px;
             display: flex;
             justify-content: space-around;
@@ -52,7 +47,6 @@
         }
         .service {
             width: 100%;
-
             margin-bottom: 20px;
             padding: 10px;
             background-color: #fff;
@@ -84,7 +78,7 @@
             margin-top: 50px;
             display: flex;
             align-items: center;
-		margin-bottom: 120px;
+            margin-bottom: 120px;
         }
         .about-text {
             flex: 1;
@@ -104,59 +98,101 @@
             height: auto;
         }
 
-    .slider {
-        position: relative;
-        width: 600px; /* Breite des Bildes anpassen */
-        margin: 0 auto;
-    }
+        .slider {
+            position: relative;
+            width: 600px; /* Breite des Bildes anpassen */
+            margin: 0 auto;
+        }
 
-    .slides {
-        display: flex;
-    }
+        .slides {
+            display: flex;
+        }
 
-    .slide {
-        flex: 0 0 100%; /* Jedes Bild nimmt 100% der verfügbaren Breite */
-        display: none;
-    }
+        .slide {
+            flex: 0 0 100%; /* Jedes Bild nimmt 100% der verfügbaren Breite */
+            display: none;
+        }
 
-    .slide img {
-        width: 100%; /* Alle Bilder haben die gleiche Breite */
-        height: auto; /* Automatische Höhe, um das Bildverhältnis beizubehalten */
-    }
+        .slide img {
+            width: 100%; /* Alle Bilder haben die gleiche Breite */
+            height: auto; /* Automatische Höhe, um das Bildverhältnis beizubehalten */
+        }
 
-    .slider-controls {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-    }
+        .slider-controls {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
 
-    .slider-controls button {
-        display: inline-block;
-        width: 75px;
-        height: 75px;
-        background-color: #333;
-        color: white;
-        border-radius: 50%;
-        border: none;
-        text-align: center;
-        font-size: 12px;
-        line-height: 50px; /* Vertikal zentrieren */
-        cursor: pointer;
-	opacity:0.7;
-    }
+        .slider-controls button {
+            display: inline-block;
+            width: 75px;
+            height: 75px;
+            background-color: #333;
+            color: white;
+            border-radius: 50%;
+            border: none;
+            text-align: center;
+            font-size: 12px;
+            line-height: 50px; /* Vertikal zentrieren */
+            cursor: pointer;
+            opacity:0.7;
+        }
 
-    .contact-background {
-        background-color: #ffc90e;
-        padding: 20px;
-        text-align: center;
-    }
+        .contact-background {
+            background-color: #ffc90e;
+            padding: 20px;
+            text-align: center;
+        }
 
-    .contact-box p {
-        margin: 5px 0;
-    }
+        .contact-box p {
+            margin: 5px 0;
+        }
+
+        /* Media Queries for smaller screens */
+        @media only screen and (max-width: 600px) {
+            header {
+                padding: 30px 0;
+            }
+            .container {
+                margin: 20px auto;
+                padding: 0 10px;
+            }
+            .services {
+                margin-top: 40px;
+            }
+            .service {
+                width: 48%;
+            }
+            form {
+                margin-top: 30px;
+            }
+            .about-us {
+                flex-direction: column-reverse;
+            }
+            .about-text, .about-image {
+                width: 100%;
+                text-align: center;
+            }
+            .slider {
+                width: 100%;
+            }
+            .slider-controls {
+                display: flex;
+                justify-content: space-around;
+            }
+            .slider-controls button {
+                width: 50px;
+                height: 50px;
+                font-size: 10px;
+            }
+            .contact-background {
+                padding: 15px;
+            }
+        }
     </style>
 </head>
 <body>
