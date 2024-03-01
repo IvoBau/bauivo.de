@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Ivo Bau</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-image: url('bilder/logo.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-color: #262230; /* Dunkles Violett */
+            color: #fff;
+            padding: 45px 0;
+            text-align: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+
+        }
+        .container {
+		
+            max-width: 800px;
+            margin: 55px auto 20px auto;
+		
+            padding: 0 20px;
+        }
+        h1, h2 , h3{
+
+            text-align: center;
+        }
+        p {
+		text-align: center;
+            line-height: 1.2;
+        }
+        .services {
+
+            margin-top: 60px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        .service {
+            width: 100%;
+
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #fff;
+            box-shadow: 10px 10px 10px rgba(0,0,0,0.1);
+        }
+        form {
+            margin-top: 50px;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        input[type="text"], input[type="email"], textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .about-us {
+            margin-top: 50px;
+            display: flex;
+            align-items: center;
+		margin-bottom: 120px;
+        }
+        .about-text {
+            flex: 1;
+        }
+        .about-text h2 {
+            margin-bottom: 60px;
+        }
+        .about-text p {
+            line-height: 1.6;
+        }
+        .about-image {
+            flex: 1;
+            text-align: center;
+        }
+        .about-image img {
+            max-width: 100%;
+            height: auto;
+        }
+
+    .slider {
+        position: relative;
+        width: 600px; /* Breite des Bildes anpassen */
+        margin: 0 auto;
+    }
+
+    .slides {
+        display: flex;
+    }
+
+    .slide {
+        flex: 0 0 100%; /* Jedes Bild nimmt 100% der verfügbaren Breite */
+        display: none;
+    }
+
+    .slide img {
+        width: 100%; /* Alle Bilder haben die gleiche Breite */
+        height: auto; /* Automatische Höhe, um das Bildverhältnis beizubehalten */
+    }
+
+    .slider-controls {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .slider-controls button {
+        display: inline-block;
+        width: 75px;
+        height: 75px;
+        background-color: #333;
+        color: white;
+        border-radius: 50%;
+        border: none;
+        text-align: center;
+        font-size: 12px;
+        line-height: 50px; /* Vertikal zentrieren */
+        cursor: pointer;
+	opacity:0.7;
+    }
+
+    .contact-background {
+        background-color: #ffc90e;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .contact-box p {
+        margin: 5px 0;
+    }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1></h1>
+        </div>
+    </header>
+   <div class="container">
+        <h2>1</h2>
+	<h2>1</h2>
+	<br>
+	<h2>Unsere Dienstleistungen</h2>
+        <div class="services">
+            <div class="service">
+                <h3>Innenausbau</h3>
+                <p>Fachgerechter Innenausbau für ein behagliches Wohngefühl.</p>
+            </div>
+            <div class="service">
+                <h3>Trockenbau</h3>
+                <p>Individuelle Trockenbau-Lösungen für Ihre Bedürfnisse.</p>
+            </div>
+            <div class="service">
+                <h3>Kernsanierung</h3>
+                <p>Komplette Kernsanierung von Gebäuden und Räumen.</p>
+            </div>
+            <div class="service">
+                <h3>Rissbeseitigung</h3>
+                <p>Professionelle Rissbeseitigung und Mauerwerkssanierung.</p>
+            </div>
+            <div class="service">
+                <h3>Malen-Lackieren</h3>
+                <p>Individuelle Gestaltung mit hochwertigen Farben und Lacken.</p>
+            </div>
+            <div class="service">
+                <h3>Tapazierung</h3>
+                <p>Präzise und professionelle Tapetenverlegung nach Ihren Wünschen.</p>
+            </div>
+            <div class="service">
+                <h3>Verputzen</h3>
+                <p>Glatter und gleichmäßiger Putzauftrag für ein ansprechendes Erscheinungsbild.</p>
+            </div>
+            <div class="service">
+                <h3>Spachteln</h3>
+                <p>Fachgerechtes Spachteln für ebene Oberflächen.</p>
+            </div>
+            <div class="service">
+                <h3>Wärmedämmung</h3>
+                <p>Effiziente Wärmedämmung für mehr Energieeffizienz.</p>
+            </div>
+            <div class="service">
+                <h3>PVC Bodenverlegung</h3>
+                <p>Professionelle Verlegung von PVC-Böden für langlebige Lösungen.</p>
+            </div>
+            <div class="service">
+                <h3>Oberputz</h3>
+                <p>Qualitativ hochwertiger Oberputz für ein ansprechendes Finish.</p>
+            </div>
+            <!-- Add more services as needed -->
+        </div>
+        
+         <h2>Kontaktiere uns</h2>
+        <form action="submit_form.php" method="post">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+            <label for="surname">Nachname:</label>
+            <input type="text" id="surname" name="surname" required>
+            <label for="address">Adresse (Hausnummer, Straße):</label>
+            <input type="text" id="address" name="address" placeholder="Hausnummer, Straße">
+            <input type="text" id="postal_code" name="postal_code" placeholder="Postleitzahl">
+            <input type="text" id="city" name="city" placeholder="Stadt">
+            <label for="phone">Telefonnummer:</label>
+            <input type="text" id="phone" name="phone" placeholder="Telefonnummer">
+            <label for="email">E-Mail:</label>
+            <input type="email" id="email" name="email" placeholder="E-Mail" required>
+            <label for="request">Anfrage (max. 500 Wörter):</label>
+            <textarea id="request" name="request" rows="5" maxlength="500" required></textarea>
+            <input type="submit" value="Absenden">
+        </form>
+        
+        <div class="about-us">
+            <div class="about-text">
+                <h2>Über uns</h2>
+                <p>Wir sind ein erfahrenes Einzelunternehmen, dass sich auf Bauarbeiten und Renovierungen spezialisiert hat. Mit langjähriger Erfahrung garantieren wir Ihnen höchste Qualität zu fairen Preisen. Wenn Sie eine zuverlässige Baufirma suchen, stehen wir von Ivo Bau gerne zur Verfügung.</p>
+            </div>
+            <div class="about-image">
+                <img src="bilder/ivo.jpg" alt="Bauarbeiter">
+            </div>
+        </div>
+        
+
+
+
+        <div class="slider">
+            <div class="slides">
+                <div class="slide"><img src="bilder/1.jpg" alt="Bild 1"></div>
+                <div class="slide"><img src="bilder/2.jpg" alt="Bild 2"></div>
+                <div class="slide"><img src="bilder/3.jpg" alt="Bild 3"></div>
+                <div class="slide"><img src="bilder/4.jpg" alt="Bild 4"></div>
+                <div class="slide"><img src="bilder/5.jpg" alt="Bild 5"></div>
+                <div class="slide"><img src="bilder/6.jpg" alt="Bild 6"></div>
+                <div class="slide"><img src="bilder/7.jpg" alt="Bild 7"></div>
+            </div>
+            <div class="slider-controls">
+                <button onclick="prevSlide()">Vorheriges</button>
+                <button onclick="nextSlide()">Nächstes</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="contact-background">
+        <div class="contact-box">
+            <br>
+            <p>Telefon: 0157 35255753</p>
+            <p>Email: bau.tunjic@gmail.com</p>
+        </div>
+    </div>
+
+    <script>
+
+        var slides = document.querySelectorAll('.slide');
+        var currentSlide = 1;
+
+        function showSlide(n) {
+            slides[currentSlide].style.display = 'none';
+            currentSlide = (n + slides.length) % slides.length;
+            slides[currentSlide].style.display = 'block';
+        }
+	showSlide(currentSlide);
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function prevSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+    </script>
+
+</body>
+</html>
