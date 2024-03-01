@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="UTF-8">
@@ -16,26 +17,33 @@
             color: #333;
             line-height: 1.6;
         }
-        h1, h2, h3 {
+
+        h1,
+        h2,
+        h3 {
             margin: 20px 0;
             text-align: center;
         }
+
         p {
             margin-bottom: 20px;
             text-align: center;
         }
+
         .container {
             max-width: 800px;
             margin: 55px auto 20px auto;
             padding: 0 20px;
         }
+
         /* Header styles */
         header {
             background-image: url('bilder/logo.png');
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
-            background-color: #262230; /* Dunkles Violett */
+            background-color: #262230;
+            /* Dunkles Violett */
             color: #fff;
             padding: 45px 0;
             text-align: center;
@@ -44,6 +52,7 @@
             top: 0;
             z-index: 1000;
         }
+
         /* Service section styles */
         .services {
             margin-top: 60px;
@@ -51,25 +60,31 @@
             justify-content: space-around;
             flex-wrap: wrap;
         }
+
         .service {
             width: 31%;
             margin-bottom: 20px;
             padding: 20px;
             background-color: #fff;
-            box-shadow: 10px 10px 10px rgba(0,0,0,0.1);
+            box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease;
         }
+
         .service:hover {
             transform: translateY(-5px);
         }
+
         /* Form styles */
         form {
             margin-top: 50px;
             background-color: #fff;
             padding: 20px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        input[type="text"], input[type="email"], textarea {
+
+        input[type="text"],
+        input[type="email"],
+        textarea {
             width: 100%;
             padding: 10px;
             margin-bottom: 10px;
@@ -77,6 +92,7 @@
             border-radius: 5px;
             box-sizing: border-box;
         }
+
         input[type="submit"] {
             background-color: #333;
             color: #fff;
@@ -86,121 +102,125 @@
             border-radius: 5px;
             width: auto;
         }
+
         /* About section styles */
         .about-us {
             margin-top: 50px;
             display: flex;
             align-items: center;
             margin-bottom: 120px;
+            flex-direction: column;
         }
+
         .about-text {
-            flex: 1;
-        }
-        .about-text h2 {
-            margin-bottom: 60px;
-        }
-        .about-text p {
-            line-height: 1.6;
-        }
-        .about-image {
             flex: 1;
             text-align: center;
         }
+
+        .about-text h2 {
+            margin-bottom: 20px;
+        }
+
+        .about-text p {
+            line-height: 1.6;
+        }
+
+        .about-image {
+            flex: 1;
+            text-align: center;
+            margin-top: 20px;
+        }
+
         .about-image img {
             max-width: 100%;
             height: auto;
             border-radius: 5px;
         }
+
         /* Slider styles */
         .slider {
             position: relative;
-            max-width: 600px; /* Breite des Bildes anpassen */
-            margin: 0 auto;
+            max-width: 600px;
+            /* Breite des Bildes anpassen */
+            margin: 20px auto;
+            overflow: hidden;
         }
+
         .slides {
             display: flex;
+            transition: transform 0.5s ease;
         }
+
         .slide {
-            flex: 0 0 100%; /* Jedes Bild nimmt 100% der verfügbaren Breite */
+            flex: 0 0 100%;
+            /* Jedes Bild nimmt 100% der verfügbaren Breite */
             display: none;
         }
+
         .slide img {
-            width: 100%; /* Alle Bilder haben die gleiche Breite */
-            height: auto; /* Automatische Höhe, um das Bildverhältnis beizubehalten */
-        }
-        .slider-controls {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
             width: 100%;
-            display: flex;
-            justify-content: space-between;
+            /* Alle Bilder haben die gleiche Breite */
+            height: auto;
+            /* Automatische Höhe, um das Bildverhältnis beizubehalten */
         }
+
+        .slider-controls {
+            text-align: center;
+            margin-top: 20px;
+        }
+
         .slider-controls button {
-            display: inline-block;
-            width: 75px;
-            height: 75px;
             background-color: #333;
             color: white;
-            border-radius: 50%;
             border: none;
-            text-align: center;
-            font-size: 12px;
-            line-height: 50px; /* Vertikal zentrieren */
+            border-radius: 50%;
             cursor: pointer;
-            opacity:0.7;
+            margin: 0 5px;
+            padding: 10px 12px;
         }
+
         /* Contact background styles */
         .contact-background {
             background-color: #ffc90e;
             padding: 20px;
             text-align: center;
         }
+
         .contact-box p {
             margin: 5px 0;
         }
+
         /* Media Queries */
         @media only screen and (max-width: 600px) {
-            header {
-                padding: 30px 0;
-            }
-            .container {
-                margin: 20px auto;
-                padding: 0 10px;
-            }
-            .services {
-                margin-top: 40px;
-            }
             .service {
                 width: 48%;
             }
-            form {
+
+            .about-us {
                 margin-top: 30px;
             }
-            input[type="submit"] {
-                font-size: 14px;
+
+            .about-image {
+                order: -1;
             }
-            .about-us {
-                flex-direction: column;
-            }
+
             .slider {
-                width: 100%; /* Adjust width for smaller screens */
+                max-width: 100%;
             }
+
             .slider-controls {
                 display: flex;
-                justify-content: space-around;
+                justify-content: center;
+                margin-top: 10px;
             }
+
             .slider-controls button {
-                width: 50px;
-                height: 50px;
-                font-size: 10px;
-            }
-            .contact-background {
-                padding: 15px;
+                padding: 8px 10px;
             }
         }
     </style>
 </head>
+
 <body>
 
     <header>
@@ -312,7 +332,6 @@
 
     <div class="contact-background">
         <div class="contact-box">
-            <br>
             <p>Telefon: 0157 35255753</p>
             <p>Email: bau.tunjic@gmail.com</p>
         </div>
