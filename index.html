@@ -24,9 +24,6 @@
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
                         serif: ['Playfair Display', 'serif']
-                    },
-                    spacing: {
-                        'safe-bottom': 'env(safe-area-inset-bottom)'
                     }
                 }
             }
@@ -34,23 +31,36 @@
     </script>
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+    
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    
+    <!-- EmailJS -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
     <link rel="stylesheet" href="style.css">
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
-        /* ── Base mobile resets ───────────────────────────────────────── */
-        *, *::before, *::after { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
+        /* ── Base resets ─────────────────────────────────────────────── */
+        *, *::before, *::after {
+            -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
+        }
         html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
         body { -webkit-font-smoothing: antialiased; overscroll-behavior-y: none; }
         img { max-width: 100%; height: auto; }
 
         /* ── Swiper custom colours ───────────────────────────────────── */
         .swiper-button-next,
-        .swiper-button-prev { color: #d4af37 !important; --swiper-navigation-size: 20px; }
+        .swiper-button-prev {
+            color: #d4af37 !important;
+            --swiper-navigation-size: 20px;
+        }
         .swiper-pagination-bullet-active { background: #d4af37 !important; }
         .swiper-button-next, .swiper-button-prev {
-            width: 36px !important; height: 36px !important;
+            width: 36px !important;
+            height: 36px !important;
             background: rgba(11,15,25,.7);
             border-radius: 50%;
             backdrop-filter: blur(4px);
@@ -59,14 +69,98 @@
             .swiper-button-next, .swiper-button-prev { display: none !important; }
         }
 
-        /* ── Scroll-based fade-in (CSS-only fallback) ────────────────── */
-        .gsap-fade-up, .gsap-fade-left, .gsap-fade-right { will-change: transform, opacity; }
+        /* ── FIX: Swiper slide image container ───────────────────────
+           Verhindert Flackern auf iOS/Android.
+           Explizite Höhe am .swiper-slide, Bild füllt es absolut aus.
+        ────────────────────────────────────────────────────────────── */
+        .service-swiper {
+            width: 100%;
+            /* Wichtig: position relative damit absolute Kinder korrekt positioniert werden */
+            position: relative;
+            /* Hardware-Beschleunigung aktivieren – verhindert Flimmern */
+            -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+        }
+
+        .service-swiper .swiper-slide {
+            /* Feste Höhe per CSS – kein Inline-Style nötig */
+            height: 230px;
+            position: relative;
+            overflow: hidden;
+            /* Verhindert weißes Aufblitzen zwischen Slides */
+            background-color: #1a1f2b;
+        }
+
+        @media (min-width: 640px) {
+            .service-swiper .swiper-slide {
+                height: 380px;
+            }
+        }
+
+        .service-swiper .swiper-slide img {
+            /* Absolut positioniert, füllt den Slide komplett aus */
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            /* Sanftes Einblenden wenn geladen */
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            /* GPU-Beschleunigung für sanfte Animationen */
+            -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+            will-change: opacity;
+        }
+
+        /* Bild sichtbar machen sobald geladen */
+        .service-swiper .swiper-slide img.loaded {
+            opacity: 1;
+        }
+
+        /* Lade-Skeleton während Bild lädt */
+        .service-swiper .swiper-slide::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, #1a1f2b 25%, #222840 50%, #1a1f2b 75%);
+            background-size: 200% 100%;
+            animation: skeleton-shimmer 1.5s infinite;
+            z-index: 0;
+        }
+
+        .service-swiper .swiper-slide img.loaded ~ * { position: relative; z-index: 1; }
+
+        @keyframes skeleton-shimmer {
+            0%   { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Caption overlay innerhalb Slides */
+        .service-swiper .swiper-slide .slide-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+            padding: 12px 16px;
+            z-index: 2;
+        }
+
+        /* ── Scroll-based fade-in ────────────────────────────────────── */
+        .gsap-fade-up, .gsap-fade-left, .gsap-fade-right {
+            will-change: transform, opacity;
+        }
 
         /* ── Touch-friendly tap targets ──────────────────────────────── */
         a, button, input[type="checkbox"], select { min-height: 44px; }
         label { cursor: pointer; }
 
-        /* ── Prevent overflow on very small screens ──────────────────── */
+        /* ── Prevent overflow ────────────────────────────────────────── */
         section, footer, nav { max-width: 100vw; overflow-x: hidden; }
 
         /* ── Sticky CTA bar (mobile only) ────────────────────────────── */
@@ -83,12 +177,12 @@
         }
         @media (max-width: 767px) { #sticky-cta { display: flex; } }
 
-        /* ── Hero: prevent text overflow on very narrow phones ──────── */
+        /* ── Hero ────────────────────────────────────────────────────── */
         @media (max-width: 380px) {
             #hero h1 { font-size: 1.9rem !important; }
         }
 
-        /* ── Service block: stack neatly on mobile ──────────────────── */
+        /* ── Service block stack on mobile ──────────────────────────── */
         @media (max-width: 1023px) {
             .service-block > div { grid-column: span 12 !important; }
             .service-block > div.order-2 { order: 2 !important; }
@@ -97,25 +191,21 @@
         }
 
         /* ── Process line hidden on mobile ──────────────────────────── */
-        @media (max-width: 767px) {
-            .process-line { display: none !important; }
-        }
+        @media (max-width: 767px) { .process-line { display: none !important; } }
 
-        /* ── About image decoration: clip on mobile ──────────────────── */
-        @media (max-width: 767px) {
-            .about-deco { display: none; }
-        }
+        /* ── About deco hidden on mobile ─────────────────────────────── */
+        @media (max-width: 767px) { .about-deco { display: none; } }
 
-        /* ── Contact form inputs: proper sizing on iOS ───────────────── */
+        /* ── iOS zoom fix ────────────────────────────────────────────── */
         input, textarea, select {
-            font-size: 16px !important; /* prevents iOS zoom */
+            font-size: 16px !important;
             border-radius: 4px;
         }
 
-        /* ── Smooth scroll offset for fixed navbar ───────────────────── */
+        /* ── Scroll offset for fixed navbar ──────────────────────────── */
         :target { scroll-margin-top: 80px; }
 
-        /* ── Performance: reduce motion for users who prefer it ──────── */
+        /* ── Reduced motion ──────────────────────────────────────────── */
         @media (prefers-reduced-motion: reduce) {
             .gsap-fade-up, .gsap-fade-left, .gsap-fade-right {
                 opacity: 1 !important; transform: none !important;
@@ -123,20 +213,48 @@
             * { animation-duration: .01ms !important; transition-duration: .01ms !important; }
         }
 
-        /* ── Person card: always column on very small screens ───────── */
+        /* ── Person card ─────────────────────────────────────────────── */
         @media (max-width: 400px) {
             .person-card { flex-direction: column !important; }
             .person-card-photo { width: 100% !important; height: 200px !important; }
         }
 
-        /* ── Why-us grid: single column below 400px ─────────────────── */
+        /* ── Why-us grid ─────────────────────────────────────────────── */
         @media (max-width: 400px) {
             .why-grid { grid-template-columns: 1fr !important; }
         }
 
-        /* ── Footer columns: single column on very small ────────────── */
+        /* ── Footer ──────────────────────────────────────────────────── */
         @media (max-width: 400px) {
             .footer-grid { grid-template-columns: 1fr !important; }
+        }
+
+        /* ── Form status animation ───────────────────────────────────── */
+        #form-status {
+            transition: opacity 0.3s ease;
+        }
+
+        /* ── Submit button loading state ─────────────────────────────── */
+        #submit-btn.loading {
+            opacity: 0.7;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+        #submit-btn .btn-spinner {
+            display: none;
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(11,15,25,0.3);
+            border-top-color: #0b0f19;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+        #submit-btn.loading .btn-spinner { display: block; }
+        #submit-btn.loading .btn-text { display: none; }
+        #submit-btn.loading .btn-icon { display: none; }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -148,12 +266,12 @@
             <div class="flex justify-between items-center h-12">
 
                 <div class="flex-shrink-0 cursor-pointer" onclick="window.scrollTo({top:0,behavior:'smooth'})">
-                    <img src="IvoBau.png" alt="IvoBau Logo" class="h-10 sm:h-12 w-auto object-contain" style="filter:brightness(0) invert(1);" loading="lazy">
+                    <img src="IvoBau.png" alt="IvoBau Logo" class="h-10 sm:h-12 w-auto object-contain" style="filter:brightness(0) invert(1);" loading="eager">
                 </div>
 
                 <!-- Desktop nav -->
                 <div class="hidden md:flex space-x-6 lg:space-x-8 items-center">
-                    <a href="#about"   class="text-gray-300 hover:text-ivo-gold transition-colors text-sm uppercase tracking-wide">Über uns</a>
+                    <a href="#about"    class="text-gray-300 hover:text-ivo-gold transition-colors text-sm uppercase tracking-wide">Über uns</a>
                     <a href="#services" class="text-gray-300 hover:text-ivo-gold transition-colors text-sm uppercase tracking-wide">Leistungen</a>
                     <a href="#gallery"  class="text-gray-300 hover:text-ivo-gold transition-colors text-sm uppercase tracking-wide">Referenzen</a>
                     <a href="#process"  class="text-gray-300 hover:text-ivo-gold transition-colors text-sm uppercase tracking-wide">Ablauf</a>
@@ -192,7 +310,6 @@
     <!-- ═══════════════════════════ HERO ════════════════════════════════ -->
     <section id="hero" class="relative min-h-screen flex items-center justify-center pt-20">
         <div class="absolute inset-0 z-0">
-            <!-- lazy load hero image on mobile via CSS trick -->
             <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=70"
                  alt="Moderner Innenausbau"
                  class="w-full h-full object-cover opacity-30"
@@ -211,7 +328,6 @@
             <p class="mt-3 max-w-xl mx-auto text-base sm:text-xl text-gray-300 mb-8 font-light leading-relaxed">
                 Professioneller Innenausbau, zuverlässige Wärmedämmung und exzellente Renovierungsarbeiten. Präzision in jedem Detail.
             </p>
-            <!-- Desktop CTA buttons (hidden on mobile – sticky bar takes over) -->
             <div class="hidden sm:flex flex-col sm:flex-row gap-4 justify-center items-center">
                 <a href="#contact" class="w-full sm:w-auto px-8 py-4 bg-ivo-gold text-ivo-dark font-bold rounded-sm hover:bg-ivo-gold-hover transition-all duration-300 hover:-translate-y-1 flex items-center justify-center gap-2">
                     Angebot anfragen <i data-lucide="arrow-right" class="w-5 h-5"></i>
@@ -220,7 +336,6 @@
                     <i data-lucide="phone" class="w-5 h-5"></i> Jetzt anrufen
                 </a>
             </div>
-            <!-- Mobile: scroll hint -->
             <div class="sm:hidden mt-8 flex flex-col items-center gap-2 text-gray-500 text-xs animate-bounce">
                 <i data-lucide="chevrons-down" class="w-5 h-5 text-ivo-gold/60"></i>
             </div>
@@ -288,11 +403,21 @@
                     <div class="lg:col-span-7 order-1 lg:order-2 w-full">
                         <div class="swiper service-swiper rounded-sm overflow-hidden shadow-2xl">
                             <div class="swiper-wrapper">
-                                <div class="swiper-slide"><img src="Pictures/Graphit_EPS_Hanau_1.jpg" alt="Graphit EPS Hanau – Vorher" class="w-full h-[230px] sm:h-[380px] object-cover object-center" loading="lazy"></div>
-                                <div class="swiper-slide"><img src="Pictures/Graphit_EPS_Hanau_2.jpg" alt="Graphit EPS Hanau – Nachher" class="w-full h-[230px] sm:h-[380px] object-cover object-center" loading="lazy"></div>
-                                <div class="swiper-slide"><img src="Pictures/20250402_123825.jpg" alt="Wärmedämmung Detailarbeit" class="w-full h-[230px] sm:h-[380px] object-cover object-center" loading="lazy"></div>
-                                <div class="swiper-slide"><img src="Pictures/Kellerdeckendämmung_Graphit_EPS_1.jpg" alt="Kellerdeckendämmung Graphit EPS" class="w-full h-[230px] sm:h-[380px] object-cover object-center" loading="lazy"></div>
-                                <div class="swiper-slide"><img src="Pictures/Kellerdeckendämmung_Graphit_EPS_3.jpg" alt="Kellerdeckendämmung fertig" class="w-full h-[230px] sm:h-[380px] object-cover object-center" loading="lazy"></div>
+                                <div class="swiper-slide">
+                                    <img src="Pictures/Graphit_EPS_Hanau_1.jpg" alt="Graphit EPS Hanau – Vorher" class="" loading="lazy" decoding="async">
+                                </div>
+                                <div class="swiper-slide">
+                                    <img src="Pictures/Graphit_EPS_Hanau_2.jpg" alt="Graphit EPS Hanau – Nachher" class="" loading="lazy" decoding="async">
+                                </div>
+                                <div class="swiper-slide">
+                                    <img src="Pictures/20250402_123825.jpg" alt="Wärmedämmung Detailarbeit" class="" loading="lazy" decoding="async">
+                                </div>
+                                <div class="swiper-slide">
+                                    <img src="Pictures/Kellerdeckendämmung_Graphit_EPS_1.jpg" alt="Kellerdeckendämmung Graphit EPS" class="" loading="lazy" decoding="async">
+                                </div>
+                                <div class="swiper-slide">
+                                    <img src="Pictures/Kellerdeckendämmung_Graphit_EPS_3.jpg" alt="Kellerdeckendämmung fertig" class="" loading="lazy" decoding="async">
+                                </div>
                             </div>
                             <div class="swiper-pagination"></div>
                             <div class="swiper-button-prev"></div>
@@ -306,12 +431,24 @@
                     <div class="lg:col-span-7 w-full order-1">
                         <div class="swiper service-swiper rounded-sm overflow-hidden shadow-2xl">
                             <div class="swiper-wrapper">
-                                <div class="swiper-slide"><img src="Pictures/11.png" alt="Trockenbau Decke" class="w-full h-[230px] sm:h-[380px] object-cover" loading="lazy"></div>
-                                <div class="swiper-slide"><img src="Pictures/22.jpg" alt="Trockenbau Innenausbau" class="w-full h-[230px] sm:h-[380px] object-cover" loading="lazy"></div>
-                                <div class="swiper-slide"><img src="Pictures/TB_Badezimmer_2.jpg" alt="Trockenbau Badezimmer" class="w-full h-[230px] sm:h-[380px] object-cover" loading="lazy"></div>
-                                <div class="swiper-slide"><img src="Pictures/Laibung_3.jpg" alt="Laibung Arbeit" class="w-full h-[230px] sm:h-[380px] object-cover" loading="lazy"></div>
-                                <div class="swiper-slide"><img src="Pictures/Laibung_1.jpg" alt="Laibung Fenster" class="w-full h-[230px] sm:h-[380px] object-cover" loading="lazy"></div>
-                                <div class="swiper-slide"><img src="Pictures/Laibung_2.jpg" alt="Laibung Vorher" class="w-full h-[230px] sm:h-[380px] object-cover" loading="lazy"></div>
+                                <div class="swiper-slide">
+                                    <img src="Pictures/11.png" alt="Trockenbau Decke" class="" loading="lazy" decoding="async">
+                                </div>
+                                <div class="swiper-slide">
+                                    <img src="Pictures/22.jpg" alt="Trockenbau Innenausbau" class="" loading="lazy" decoding="async">
+                                </div>
+                                <div class="swiper-slide">
+                                    <img src="Pictures/TB_Badezimmer_2.jpg" alt="Trockenbau Badezimmer" class="" loading="lazy" decoding="async">
+                                </div>
+                                <div class="swiper-slide">
+                                    <img src="Pictures/Laibung_3.jpg" alt="Laibung Arbeit" class="" loading="lazy" decoding="async">
+                                </div>
+                                <div class="swiper-slide">
+                                    <img src="Pictures/Laibung_1.jpg" alt="Laibung Fenster" class="" loading="lazy" decoding="async">
+                                </div>
+                                <div class="swiper-slide">
+                                    <img src="Pictures/Laibung_2.jpg" alt="Laibung Vorher" class="" loading="lazy" decoding="async">
+                                </div>
                             </div>
                             <div class="swiper-pagination"></div>
                             <div class="swiper-button-prev"></div>
@@ -344,12 +481,18 @@
                     <div class="lg:col-span-7 order-1 lg:order-2 w-full">
                         <div class="swiper service-swiper rounded-sm overflow-hidden shadow-2xl">
                             <div class="swiper-wrapper">
-                                <div class="swiper-slide"><img src="Pictures/Trockenestrisch_3.jpg" alt="Trockenestrich Dämmschicht" class="w-full h-[230px] sm:h-[380px] object-cover" loading="lazy"></div>
-                                <div class="swiper-slide"><img src="Pictures/Trockenestrisch_5.jpg" alt="Trockenestrich Platten" class="w-full h-[230px] sm:h-[380px] object-cover" loading="lazy"></div>
-                                <div class="swiper-slide"><img src="Pictures/Trockenestrisch_1.jpg" alt="Trockenestrich Schüttung" class="w-full h-[230px] sm:h-[380px] object-cover" loading="lazy"></div>
-                                <div class="swiper-slide relative">
-                                    <img src="Pictures/Filzputz.jpg" alt="Filzputz Oberfläche" class="w-full h-[230px] sm:h-[380px] object-cover" loading="lazy">
-                                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent px-4 py-3">
+                                <div class="swiper-slide">
+                                    <img src="Pictures/Trockenestrisch_3.jpg" alt="Trockenestrich Dämmschicht" class="" loading="lazy" decoding="async">
+                                </div>
+                                <div class="swiper-slide">
+                                    <img src="Pictures/Trockenestrisch_5.jpg" alt="Trockenestrich Platten" class="" loading="lazy" decoding="async">
+                                </div>
+                                <div class="swiper-slide">
+                                    <img src="Pictures/Trockenestrisch_1.jpg" alt="Trockenestrich Schüttung" class="" loading="lazy" decoding="async">
+                                </div>
+                                <div class="swiper-slide">
+                                    <img src="Pictures/Filzputz.jpg" alt="Filzputz Oberfläche" class="" loading="lazy" decoding="async">
+                                    <div class="slide-caption">
                                         <span class="text-white font-semibold tracking-widest uppercase text-xs sm:text-sm">Filzputz</span>
                                     </div>
                                 </div>
@@ -402,9 +545,7 @@
             </div>
 
             <div class="relative">
-                <!-- Connecting line desktop only -->
                 <div class="process-line hidden md:block absolute top-[28px] left-[12.5%] w-3/4 h-0.5 bg-white/10"></div>
-
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-5 sm:gap-8">
                     <div class="relative text-center gsap-fade-up z-10">
                         <div class="w-12 h-12 sm:w-16 sm:h-16 mx-auto bg-ivo-dark border-2 border-ivo-gold rounded-full flex items-center justify-center text-ivo-gold font-bold text-lg sm:text-xl mb-4 sm:mb-6">1</div>
@@ -483,7 +624,7 @@
 
                 <!-- Right: Form -->
                 <div class="bg-ivo-anthracite p-5 sm:p-8 rounded-sm shadow-2xl border border-white/5 gsap-fade-left">
-                    <form id="contact-form" class="space-y-5">
+                    <form id="contact-form" class="space-y-5" novalidate>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                             <div>
                                 <label for="name" class="block text-xs sm:text-sm font-medium text-gray-400 mb-1.5">Vollständiger Name *</label>
@@ -542,8 +683,9 @@
 
                         <button type="submit" id="submit-btn"
                                 class="w-full bg-ivo-gold text-ivo-dark font-bold py-4 rounded-sm hover:bg-ivo-gold-hover transition-colors flex justify-center items-center gap-2 text-sm sm:text-base">
-                            <span>Anfrage senden</span>
-                            <i data-lucide="send" class="w-4 h-4"></i>
+                            <span class="btn-text">Anfrage senden</span>
+                            <i data-lucide="send" class="w-4 h-4 btn-icon"></i>
+                            <div class="btn-spinner"></div>
                         </button>
 
                         <div id="form-status" class="hidden p-4 rounded-sm text-sm font-medium text-center"></div>
@@ -616,29 +758,82 @@
     <!-- ═══════════════════════════ SCRIPTS ═════════════════════════════ -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    
+    <!-- Swiper JS – Version 11 für besseres Lazy Loading -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
     <script>
+    // ════════════════════════════════════════════════════════════════
+    // EmailJS Konfiguration
+    // WICHTIG: Ersetze diese Werte mit deinen eigenen aus emailjs.com
+    // Anleitung: siehe emailjs-setup.md
+    // ════════════════════════════════════════════════════════════════
+    var EMAILJS_PUBLIC_KEY    = 'DEIN_PUBLIC_KEY';      // z.B. 'abc123XYZ'
+    var EMAILJS_SERVICE_ID    = 'DEIN_SERVICE_ID';      // z.B. 'service_ivobau'
+    var EMAILJS_TEMPLATE_ID   = 'DEIN_TEMPLATE_ID';     // z.B. 'template_anfrage'
+
     document.addEventListener('DOMContentLoaded', function () {
 
-        // ── Swiper ────────────────────────────────────────────────────
+        // ── EmailJS initialisieren ────────────────────────────────────
+        if (typeof emailjs !== 'undefined') {
+            emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+        }
+
+        // ── Swiper – mit Lazy Loading & iOS-Fixes ─────────────────────
         document.querySelectorAll('.service-swiper').forEach(function (el) {
             new Swiper(el, {
                 loop: true,
-                autoplay: { delay: 4500, disableOnInteraction: false, pauseOnMouseEnter: true },
+                // Lazy loading: Bilder werden erst geladen wenn der Slide sichtbar ist
+                lazy: {
+                    loadPrevNext: true,        // auch den nächsten Slide vorausladen
+                    loadPrevNextAmount: 1,
+                },
+                // Autoplay
+                autoplay: {
+                    delay: 4500,
+                    disableOnInteraction: false,
+                    pauseOnMouseEnter: true
+                },
                 speed: 550,
-                pagination: { el: el.querySelector('.swiper-pagination'), clickable: true },
+                // Pagination & Navigation
+                pagination: {
+                    el: el.querySelector('.swiper-pagination'),
+                    clickable: true
+                },
                 navigation: {
                     nextEl: el.querySelector('.swiper-button-next'),
                     prevEl: el.querySelector('.swiper-button-prev')
                 },
+                // Touch
                 touchRatio: 1,
                 grabCursor: true,
                 slidesPerView: 1,
                 spaceBetween: 0,
-                // Better touch on iOS
-                touchStartPreventDefault: false
+                touchStartPreventDefault: false,
+                // iOS-Fix: verhindert Flackern bei Slide-Wechsel
+                watchSlidesProgress: true,
+                // Wichtig für iOS: CSS-Transitions statt JS-Transforms
+                cssMode: false,
+                // Verhindert leere Slides beim Loop
+                loopAdditionalSlides: 1,
             });
+        });
+
+        // ── Bild-Fade-In wenn geladen ─────────────────────────────────
+        // Gilt für alle Bilder auf der Seite (nicht nur Swiper)
+        document.querySelectorAll('img').forEach(function(img) {
+            if (img.complete && img.naturalHeight !== 0) {
+                img.classList.add('loaded');
+            } else {
+                img.addEventListener('load', function() {
+                    img.classList.add('loaded');
+                });
+                img.addEventListener('error', function() {
+                    // Bei Ladefehler: Platzhalter-Hintergrund anzeigen
+                    img.style.opacity = '0.3';
+                    img.classList.add('loaded');
+                });
+            }
         });
 
         // ── Footer year ───────────────────────────────────────────────
@@ -669,7 +864,7 @@
             }, { passive: true });
         }
 
-        // ── Sticky CTA: hide when contact section is visible ──────────
+        // ── Sticky CTA: ausblenden wenn Kontaktformular sichtbar ──────
         var stickyCta  = document.getElementById('sticky-cta');
         var contactSec = document.getElementById('contact');
         if (stickyCta && contactSec && 'IntersectionObserver' in window) {
@@ -679,7 +874,7 @@
             }, { threshold: 0.1 }).observe(contactSec);
         }
 
-        // ── GSAP animations (only on capable devices) ─────────────────
+        // ── GSAP Animationen ──────────────────────────────────────────
         var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         if (!prefersReduced && typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
             gsap.registerPlugin(ScrollTrigger);
@@ -704,23 +899,89 @@
             });
         }
 
-        // ── Lucide icons ──────────────────────────────────────────────
+        // ── Lucide Icons ──────────────────────────────────────────────
         if (typeof lucide !== 'undefined') lucide.createIcons();
 
-        // ── Contact form ──────────────────────────────────────────────
-        var form   = document.getElementById('contact-form');
-        var status = document.getElementById('form-status');
-        if (form && status) {
+        // ════════════════════════════════════════════════════════════
+        // KONTAKTFORMULAR – sendet E-Mail via EmailJS
+        // ════════════════════════════════════════════════════════════
+        var form      = document.getElementById('contact-form');
+        var status    = document.getElementById('form-status');
+        var submitBtn = document.getElementById('submit-btn');
+
+        if (form && status && submitBtn) {
             form.addEventListener('submit', function (e) {
                 e.preventDefault();
-                status.textContent = 'Vielen Dank! Ihre Anfrage wurde gesendet. Wir melden uns bald.';
-                status.className = 'p-4 rounded-sm text-sm font-medium text-center bg-green-900/40 text-green-300 border border-green-700';
-                status.classList.remove('hidden');
-                form.reset();
-                // Scroll to confirmation on mobile
-                status.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                setTimeout(function () { status.classList.add('hidden'); }, 6000);
+
+                // Einfache Validierung
+                var name    = document.getElementById('name').value.trim();
+                var phone   = document.getElementById('phone').value.trim();
+                var email   = document.getElementById('email').value.trim();
+                var message = document.getElementById('message').value.trim();
+                var gdpr    = document.getElementById('gdpr').checked;
+                var service = document.getElementById('service').value;
+                var address = document.getElementById('address').value.trim();
+
+                if (!name || !phone || !email || !message || !gdpr) {
+                    showStatus('error', 'Bitte füllen Sie alle Pflichtfelder aus.');
+                    return;
+                }
+
+                // Button: Loading-State
+                submitBtn.classList.add('loading');
+
+                // EmailJS nicht konfiguriert? → Fallback-Hinweis
+                if (EMAILJS_PUBLIC_KEY === 'DEIN_PUBLIC_KEY') {
+                    setTimeout(function() {
+                        submitBtn.classList.remove('loading');
+                        showStatus('warning',
+                            '⚠️ EmailJS noch nicht eingerichtet. Bitte folge der Anleitung in emailjs-setup.md.');
+                    }, 800);
+                    return;
+                }
+
+                // Template-Parameter für EmailJS
+                var templateParams = {
+                    from_name:    name,
+                    from_email:   email,
+                    from_phone:   phone,
+                    service_type: service || 'Nicht angegeben',
+                    project_address: address || 'Nicht angegeben',
+                    message:      message,
+                    to_email:     'bau.tunjic@gmail.com',
+                    reply_to:     email
+                };
+
+                // E-Mail senden
+                emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
+                    .then(function () {
+                        submitBtn.classList.remove('loading');
+                        showStatus('success',
+                            '✅ Vielen Dank! Ihre Anfrage wurde erfolgreich gesendet. Wir melden uns so schnell wie möglich.');
+                        form.reset();
+                        status.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                        setTimeout(function () { status.classList.add('hidden'); }, 8000);
+                    })
+                    .catch(function (error) {
+                        submitBtn.classList.remove('loading');
+                        console.error('EmailJS Fehler:', error);
+                        showStatus('error',
+                            '❌ Fehler beim Senden. Bitte versuchen Sie es erneut oder rufen Sie uns direkt an: 0157 35255753');
+                    });
             });
+        }
+
+        function showStatus(type, message) {
+            status.textContent = message;
+            status.className = 'p-4 rounded-sm text-sm font-medium text-center ';
+            if (type === 'success') {
+                status.className += 'bg-green-900/40 text-green-300 border border-green-700';
+            } else if (type === 'error') {
+                status.className += 'bg-red-900/40 text-red-300 border border-red-700';
+            } else if (type === 'warning') {
+                status.className += 'bg-yellow-900/40 text-yellow-300 border border-yellow-700';
+            }
+            status.classList.remove('hidden');
         }
     });
     </script>
