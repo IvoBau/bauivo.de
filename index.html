@@ -108,36 +108,11 @@
             height: 100%;
             object-fit: cover;
             object-position: center;
-            /* Sanftes Einblenden wenn geladen */
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            /* GPU-Beschleunigung für sanfte Animationen */
+            /* Immer sichtbar – kein opacity:0 mehr (verursachte leere Bilder auf Mobile) */
+            opacity: 1;
+            /* GPU-Beschleunigung */
             -webkit-transform: translateZ(0);
             transform: translateZ(0);
-            will-change: opacity;
-        }
-
-        /* Bild sichtbar machen sobald geladen */
-        .service-swiper .swiper-slide img.loaded {
-            opacity: 1;
-        }
-
-        /* Lade-Skeleton während Bild lädt */
-        .service-swiper .swiper-slide::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(90deg, #1a1f2b 25%, #222840 50%, #1a1f2b 75%);
-            background-size: 200% 100%;
-            animation: skeleton-shimmer 1.5s infinite;
-            z-index: 0;
-        }
-
-        .service-swiper .swiper-slide img.loaded ~ * { position: relative; z-index: 1; }
-
-        @keyframes skeleton-shimmer {
-            0%   { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
         }
 
         /* Caption overlay innerhalb Slides */
@@ -261,7 +236,7 @@
 <body class="bg-ivo-dark text-ivo-light font-sans antialiased overflow-x-hidden selection:bg-ivo-gold selection:text-ivo-dark">
 
     <!-- ═══════════════════════════ NAVBAR ══════════════════════════════ -->
-    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-3 bg-ivo-dark/90 backdrop-blur-md border-b border-white/5">
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-3" style="background-color: rgba(11,15,25,0.97); border-bottom: 1px solid rgba(255,255,255,0.08);">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-12">
 
@@ -278,9 +253,9 @@
                     <a href="#contact"  class="bg-ivo-gold hover:bg-ivo-gold-hover text-ivo-dark px-5 py-2 rounded-sm font-semibold transition-all duration-300 hover:scale-105 text-sm whitespace-nowrap">Angebot anfragen</a>
                 </div>
 
-                <!-- Mobile hamburger -->
+                <!-- Mobile hamburger – SVG inline so it never depends on Lucide loading -->
                 <button id="mobile-menu-btn" class="md:hidden text-white hover:text-ivo-gold p-2 -mr-2 rounded-md" aria-label="Menü öffnen" aria-expanded="false">
-                    <i data-lucide="menu" class="w-6 h-6"></i>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
                 </button>
             </div>
         </div>
@@ -404,19 +379,19 @@
                         <div class="swiper service-swiper rounded-sm overflow-hidden shadow-2xl">
                             <div class="swiper-wrapper">
                                 <div class="swiper-slide">
-                                    <img src="Pictures/Graphit_EPS_Hanau_1.jpg" alt="Graphit EPS Hanau – Vorher" class="" loading="lazy" decoding="async">
+                                    <img src="Pictures/Graphit_EPS_Hanau_1.jpg" alt="Graphit EPS Hanau – Vorher" loading="eager" decoding="async">
                                 </div>
                                 <div class="swiper-slide">
-                                    <img src="Pictures/Graphit_EPS_Hanau_2.jpg" alt="Graphit EPS Hanau – Nachher" class="" loading="lazy" decoding="async">
+                                    <img src="Pictures/Graphit_EPS_Hanau_2.jpg" alt="Graphit EPS Hanau – Nachher" loading="eager" decoding="async">
                                 </div>
                                 <div class="swiper-slide">
-                                    <img src="Pictures/20250402_123825.jpg" alt="Wärmedämmung Detailarbeit" class="" loading="lazy" decoding="async">
+                                    <img src="Pictures/20250402_123825.jpg" alt="Wärmedämmung Detailarbeit" loading="eager" decoding="async">
                                 </div>
                                 <div class="swiper-slide">
-                                    <img src="Pictures/Kellerdeckendämmung_Graphit_EPS_1.jpg" alt="Kellerdeckendämmung Graphit EPS" class="" loading="lazy" decoding="async">
+                                    <img src="Pictures/Kellerdeckendämmung_Graphit_EPS_1.jpg" alt="Kellerdeckendämmung Graphit EPS" loading="eager" decoding="async">
                                 </div>
                                 <div class="swiper-slide">
-                                    <img src="Pictures/Kellerdeckendämmung_Graphit_EPS_3.jpg" alt="Kellerdeckendämmung fertig" class="" loading="lazy" decoding="async">
+                                    <img src="Pictures/Kellerdeckendämmung_Graphit_EPS_3.jpg" alt="Kellerdeckendämmung fertig" loading="eager" decoding="async">
                                 </div>
                             </div>
                             <div class="swiper-pagination"></div>
@@ -432,22 +407,22 @@
                         <div class="swiper service-swiper rounded-sm overflow-hidden shadow-2xl">
                             <div class="swiper-wrapper">
                                 <div class="swiper-slide">
-                                    <img src="Pictures/11.png" alt="Trockenbau Decke" class="" loading="lazy" decoding="async">
+                                    <img src="Pictures/11.png" alt="Trockenbau Decke" loading="eager" decoding="async">
                                 </div>
                                 <div class="swiper-slide">
-                                    <img src="Pictures/22.jpg" alt="Trockenbau Innenausbau" class="" loading="lazy" decoding="async">
+                                    <img src="Pictures/22.jpg" alt="Trockenbau Innenausbau" loading="eager" decoding="async">
                                 </div>
                                 <div class="swiper-slide">
-                                    <img src="Pictures/TB_Badezimmer_2.jpg" alt="Trockenbau Badezimmer" class="" loading="lazy" decoding="async">
+                                    <img src="Pictures/TB_Badezimmer_2.jpg" alt="Trockenbau Badezimmer" loading="eager" decoding="async">
                                 </div>
                                 <div class="swiper-slide">
-                                    <img src="Pictures/Laibung_3.jpg" alt="Laibung Arbeit" class="" loading="lazy" decoding="async">
+                                    <img src="Pictures/Laibung_3.jpg" alt="Laibung Arbeit" loading="eager" decoding="async">
                                 </div>
                                 <div class="swiper-slide">
-                                    <img src="Pictures/Laibung_1.jpg" alt="Laibung Fenster" class="" loading="lazy" decoding="async">
+                                    <img src="Pictures/Laibung_1.jpg" alt="Laibung Fenster" loading="eager" decoding="async">
                                 </div>
                                 <div class="swiper-slide">
-                                    <img src="Pictures/Laibung_2.jpg" alt="Laibung Vorher" class="" loading="lazy" decoding="async">
+                                    <img src="Pictures/Laibung_2.jpg" alt="Laibung Vorher" loading="eager" decoding="async">
                                 </div>
                             </div>
                             <div class="swiper-pagination"></div>
@@ -482,16 +457,16 @@
                         <div class="swiper service-swiper rounded-sm overflow-hidden shadow-2xl">
                             <div class="swiper-wrapper">
                                 <div class="swiper-slide">
-                                    <img src="Pictures/Trockenestrisch_3.jpg" alt="Trockenestrich Dämmschicht" class="" loading="lazy" decoding="async">
+                                    <img src="Pictures/Trockenestrisch_3.jpg" alt="Trockenestrich Dämmschicht" loading="eager" decoding="async">
                                 </div>
                                 <div class="swiper-slide">
-                                    <img src="Pictures/Trockenestrisch_5.jpg" alt="Trockenestrich Platten" class="" loading="lazy" decoding="async">
+                                    <img src="Pictures/Trockenestrisch_5.jpg" alt="Trockenestrich Platten" loading="eager" decoding="async">
                                 </div>
                                 <div class="swiper-slide">
-                                    <img src="Pictures/Trockenestrisch_1.jpg" alt="Trockenestrich Schüttung" class="" loading="lazy" decoding="async">
+                                    <img src="Pictures/Trockenestrisch_1.jpg" alt="Trockenestrich Schüttung" loading="eager" decoding="async">
                                 </div>
                                 <div class="swiper-slide">
-                                    <img src="Pictures/Filzputz.jpg" alt="Filzputz Oberfläche" class="" loading="lazy" decoding="async">
+                                    <img src="Pictures/Filzputz.jpg" alt="Filzputz Oberfläche" loading="eager" decoding="async">
                                     <div class="slide-caption">
                                         <span class="text-white font-semibold tracking-widest uppercase text-xs sm:text-sm">Filzputz</span>
                                     </div>
@@ -768,9 +743,9 @@
     // WICHTIG: Ersetze diese Werte mit deinen eigenen aus emailjs.com
     // Anleitung: siehe emailjs-setup.md
     // ════════════════════════════════════════════════════════════════
-    var EMAILJS_PUBLIC_KEY    = 'POu8H-e_AK6DIEPBK';      // z.B. 'abc123XYZ'
-    var EMAILJS_SERVICE_ID    = 'service_canpm6o';      // z.B. 'service_ivobau'
-    var EMAILJS_TEMPLATE_ID   = 'template_f6fkex9';     // z.B. 'template_anfrage'
+    var EMAILJS_PUBLIC_KEY    = 'DEIN_PUBLIC_KEY';      // z.B. 'abc123XYZ'
+    var EMAILJS_SERVICE_ID    = 'DEIN_SERVICE_ID';      // z.B. 'service_ivobau'
+    var EMAILJS_TEMPLATE_ID   = 'DEIN_TEMPLATE_ID';     // z.B. 'template_anfrage'
 
     document.addEventListener('DOMContentLoaded', function () {
 
@@ -817,23 +792,6 @@
                 // Verhindert leere Slides beim Loop
                 loopAdditionalSlides: 1,
             });
-        });
-
-        // ── Bild-Fade-In wenn geladen ─────────────────────────────────
-        // Gilt für alle Bilder auf der Seite (nicht nur Swiper)
-        document.querySelectorAll('img').forEach(function(img) {
-            if (img.complete && img.naturalHeight !== 0) {
-                img.classList.add('loaded');
-            } else {
-                img.addEventListener('load', function() {
-                    img.classList.add('loaded');
-                });
-                img.addEventListener('error', function() {
-                    // Bei Ladefehler: Platzhalter-Hintergrund anzeigen
-                    img.style.opacity = '0.3';
-                    img.classList.add('loaded');
-                });
-            }
         });
 
         // ── Footer year ───────────────────────────────────────────────
