@@ -38,10 +38,19 @@
     <!-- EmailJS -->
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
-    <link rel="stylesheet" href="style.css">
+    <!-- style.css absichtlich entfernt – alle Styles sind inline -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
+        /* ── Navbar: immer sichtbar, auch ohne Tailwind ─────────────── */
+        #navbar {
+            background-color: #0b0f19 !important;
+            border-bottom: 1px solid rgba(255,255,255,0.08) !important;
+        }
+        #navbar.shadow-lg {
+            box-shadow: 0 8px 30px rgba(0,0,0,0.4) !important;
+        }
+
         /* ── Base resets ─────────────────────────────────────────────── */
         *, *::before, *::after {
             -webkit-tap-highlight-color: transparent;
@@ -50,6 +59,8 @@
         html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
         body { -webkit-font-smoothing: antialiased; overscroll-behavior-y: none; }
         img { max-width: 100%; height: auto; }
+        /* Swiper-Bilder brauchen height:100%, nicht auto */
+        .service-swiper .swiper-slide img { height: 100% !important; max-width: none !important; width: 100% !important; }
 
         /* ── Swiper custom colours ───────────────────────────────────── */
         .swiper-button-next,
@@ -69,38 +80,39 @@
             .swiper-button-next, .swiper-button-prev { display: none !important; }
         }
 
-        /* ── FIX: Swiper slide image container ───────────────────────
-           Verhindert Flackern auf iOS/Android.
-           Explizite Höhe am .swiper-slide, Bild füllt es absolut aus.
-        ────────────────────────────────────────────────────────────── */
+        /* ── Swiper: Mobile-optimiert ──────────────────────────────── */
         .service-swiper {
             width: 100%;
-            /* Wichtig: position relative damit absolute Kinder korrekt positioniert werden */
-            position: relative;
-            /* Hardware-Beschleunigung aktivieren – verhindert Flimmern */
-            -webkit-transform: translateZ(0);
-            transform: translateZ(0);
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
+            display: block;
         }
 
+        /* Slide: Höhe relativ zur Viewport-Breite (aspect-ratio Fallback) */
         .service-swiper .swiper-slide {
-            /* Feste Höhe per CSS – kein Inline-Style nötig */
-            height: 230px;
             position: relative;
+            width: 100%;
+            /* 56vw = ca. 16:9 auf Mobile, passt perfekt in die Breite */
+            height: 56vw;
+            max-height: 320px;
             overflow: hidden;
-            /* Verhindert weißes Aufblitzen zwischen Slides */
             background-color: #1a1f2b;
         }
 
         @media (min-width: 640px) {
             .service-swiper .swiper-slide {
                 height: 380px;
+                max-height: 380px;
             }
         }
 
+        /* Kein ::before Skeleton mehr – dieser hat die Bilder überdeckt */
+        .service-swiper .swiper-slide::before {
+            display: none !important;
+            content: none !important;
+        }
+
+        /* Bild füllt den Slide vollständig aus */
         .service-swiper .swiper-slide img {
-            /* Absolut positioniert, füllt den Slide komplett aus */
+            display: block;
             position: absolute;
             top: 0;
             left: 0;
@@ -108,14 +120,11 @@
             height: 100%;
             object-fit: cover;
             object-position: center;
-            /* Immer sichtbar – kein opacity:0 mehr (verursachte leere Bilder auf Mobile) */
-            opacity: 1;
-            /* GPU-Beschleunigung */
-            -webkit-transform: translateZ(0);
-            transform: translateZ(0);
+            opacity: 1 !important;
+            /* Kein will-change, kein transform – verhindert Rendering-Bugs auf Android */
         }
 
-        /* Caption overlay innerhalb Slides */
+        /* Caption overlay */
         .service-swiper .swiper-slide .slide-caption {
             position: absolute;
             bottom: 0;
@@ -754,23 +763,16 @@
             emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
         }
 
-        // ── Swiper – mit Lazy Loading & iOS-Fixes ─────────────────────
+        // ── Swiper ────────────────────────────────────────────────────
         document.querySelectorAll('.service-swiper').forEach(function (el) {
             new Swiper(el, {
                 loop: true,
-                // Lazy loading: Bilder werden erst geladen wenn der Slide sichtbar ist
-                lazy: {
-                    loadPrevNext: true,        // auch den nächsten Slide vorausladen
-                    loadPrevNextAmount: 1,
-                },
-                // Autoplay
                 autoplay: {
                     delay: 4500,
                     disableOnInteraction: false,
                     pauseOnMouseEnter: true
                 },
                 speed: 550,
-                // Pagination & Navigation
                 pagination: {
                     el: el.querySelector('.swiper-pagination'),
                     clickable: true
@@ -779,18 +781,11 @@
                     nextEl: el.querySelector('.swiper-button-next'),
                     prevEl: el.querySelector('.swiper-button-prev')
                 },
-                // Touch
                 touchRatio: 1,
                 grabCursor: true,
                 slidesPerView: 1,
                 spaceBetween: 0,
                 touchStartPreventDefault: false,
-                // iOS-Fix: verhindert Flackern bei Slide-Wechsel
-                watchSlidesProgress: true,
-                // Wichtig für iOS: CSS-Transitions statt JS-Transforms
-                cssMode: false,
-                // Verhindert leere Slides beim Loop
-                loopAdditionalSlides: 1,
             });
         });
 
