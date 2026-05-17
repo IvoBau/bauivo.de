@@ -108,7 +108,7 @@
             scroll-snap-stop: always;
             /* Höhe über padding-bottom Trick: 16:9 auf Mobile, 16:7 auf größeren Phones */
             position: relative;
-            padding-bottom: 56.25%; /* 16:9 */
+            padding-bottom: 75%; /* 4:3 = 1.33 */
             height: 0;
             overflow: hidden;
             background: #1a1f2b;
@@ -197,13 +197,13 @@
         }
         .service-swiper .swiper-slide {
             width: 100%;
-            aspect-ratio: 16 / 7;
+            aspect-ratio: 4 / 3;
             overflow: hidden;
             background-color: #1a1f2b;
             position: relative;
         }
-        @supports not (aspect-ratio: 16 / 7) {
-            .service-swiper .swiper-slide { height: 380px; }
+        @supports not (aspect-ratio: 4 / 3) {
+            .service-swiper .swiper-slide { height: 0; padding-bottom: 75%; }
         }
         .service-swiper .swiper-slide img {
             display: block !important;
