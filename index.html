@@ -303,7 +303,31 @@
         #submit-btn.loading .btn-spinner { display: block; }
         #submit-btn.loading .btn-text { display: none; }
         #submit-btn.loading .btn-icon { display: none; }
-        @keyframes spin { to { transform: rotate(360deg); } }
+        /* ── Mobile Menu Dropdown ────────────────────────────────────── */
+        /* Nur auf Touch-Geräten sichtbar (Hamburger-Button ist md:hidden) */
+        #mobile-menu {
+            position: fixed;
+            top: 64px;
+            left: 0;
+            right: 0;
+            z-index: 9998;
+            background-color: #1a1f2b;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+            /* Slide-down Animation */
+            transform: translateY(-8px);
+            opacity: 0;
+            pointer-events: none;
+            transition: transform 0.25s ease, opacity 0.25s ease;
+            /* Wichtig: display nie auf none setzen – Animation bräuchte sonst reflow */
+            visibility: hidden;
+        }
+        #mobile-menu.open {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+            visibility: visible;
+        }
     </style>
 </head>
 <body class="bg-ivo-dark text-ivo-light font-sans antialiased overflow-x-hidden selection:bg-ivo-gold selection:text-ivo-dark">
@@ -327,16 +351,13 @@
                 </button>
             </div>
         </div>
-        <div id="mobile-menu" class="hidden border-t border-white/10 w-full shadow-2xl" style="background-color: #1a1f2b; position: fixed; top: 64px; left: 0; right: 0; z-index: 9998;">
-            <div class="px-4 pt-3 pb-5 space-y-1">
-                <div class="px-3 py-3 border-b border-white/10 mb-3">
-                    <img src="IvoBau.png" alt="IvoBau Logo" class="h-9 w-auto object-contain" style="filter:brightness(0) invert(1);" loading="lazy">
-                </div>
-                <a href="#about"    class="flex items-center px-3 py-3 text-gray-300 hover:text-ivo-gold hover:bg-white/5 rounded-sm transition-colors">Über uns</a>
-                <a href="#services" class="flex items-center px-3 py-3 text-gray-300 hover:text-ivo-gold hover:bg-white/5 rounded-sm transition-colors">Leistungen</a>
-                <a href="#gallery"  class="flex items-center px-3 py-3 text-gray-300 hover:text-ivo-gold hover:bg-white/5 rounded-sm transition-colors">Referenzen</a>
-                <a href="#process"  class="flex items-center px-3 py-3 text-gray-300 hover:text-ivo-gold hover:bg-white/5 rounded-sm transition-colors">Ablauf</a>
-                <div class="pt-2 grid grid-cols-2 gap-3">
+        <div id="mobile-menu" role="dialog" aria-label="Navigation">
+            <div class="px-4 pt-4 pb-6 space-y-1">
+                <a href="#about"    class="flex items-center gap-3 px-4 py-3.5 text-gray-200 hover:text-ivo-gold hover:bg-white/5 rounded-sm transition-colors text-base font-medium border-b border-white/5">Über uns</a>
+                <a href="#services" class="flex items-center gap-3 px-4 py-3.5 text-gray-200 hover:text-ivo-gold hover:bg-white/5 rounded-sm transition-colors text-base font-medium border-b border-white/5">Leistungen</a>
+                <a href="#gallery"  class="flex items-center gap-3 px-4 py-3.5 text-gray-200 hover:text-ivo-gold hover:bg-white/5 rounded-sm transition-colors text-base font-medium border-b border-white/5">Referenzen</a>
+                <a href="#process"  class="flex items-center gap-3 px-4 py-3.5 text-gray-200 hover:text-ivo-gold hover:bg-white/5 rounded-sm transition-colors text-base font-medium border-b border-white/5">Ablauf</a>
+                <div class="pt-3 grid grid-cols-2 gap-3">
                     <a href="tel:015735255753" class="flex items-center justify-center gap-2 px-3 py-3 border border-ivo-gold text-ivo-gold rounded-sm font-semibold text-sm">
                         <i data-lucide="phone" class="w-4 h-4"></i> Anrufen
                     </a>
@@ -943,16 +964,30 @@
         // ── Mobile menu ───────────────────────────────────────────
         var menuBtn    = document.getElementById('mobile-menu-btn');
         var mobileMenu = document.getElementById('mobile-menu');
+
+        var iconBars = '<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>';
+        var iconX    = '<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+
+        function closeMenu() {
+            mobileMenu.classList.remove('open');
+            menuBtn.setAttribute('aria-expanded', 'false');
+            menuBtn.innerHTML = iconBars;
+        }
+
         if (menuBtn && mobileMenu) {
             menuBtn.addEventListener('click', function () {
-                var isHidden = mobileMenu.classList.toggle('hidden');
-                menuBtn.setAttribute('aria-expanded', String(!isHidden));
+                var isOpen = mobileMenu.classList.toggle('open');
+                menuBtn.setAttribute('aria-expanded', String(isOpen));
+                menuBtn.innerHTML = isOpen ? iconX : iconBars;
             });
             mobileMenu.querySelectorAll('a').forEach(function (link) {
-                link.addEventListener('click', function () {
-                    mobileMenu.classList.add('hidden');
-                    menuBtn.setAttribute('aria-expanded', 'false');
-                });
+                link.addEventListener('click', closeMenu);
+            });
+            // Schließen beim Klick außerhalb
+            document.addEventListener('click', function (e) {
+                if (!mobileMenu.contains(e.target) && !menuBtn.contains(e.target)) {
+                    closeMenu();
+                }
             });
         }
 
@@ -1020,7 +1055,7 @@
                 if (EMAILJS_PUBLIC_KEY === 'DEIN_PUBLIC_KEY') {
                     setTimeout(function () {
                         submitBtn.classList.remove('loading');
-                        showStatus('warning', '⚠️ EmailJS noch nicht eingerichtet.');
+                        showStatus('warning', '⚠️ Fehler beim Senden. Bitte versuchen Sie es erneut oder rufen Sie uns direkt an: 0157 35255753');
                     }, 800);
                     return;
                 }
