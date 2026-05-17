@@ -800,7 +800,7 @@
     // ════════════════════════════════════════════════════════════════
     var EMAILJS_PUBLIC_KEY = 'POu8H-e_AK6DIEPBK';
     var EMAILJS_SERVICE_ID = 'service_canpm6o';
-    var EMAILJS_CAREER_TEMPLATE_ID = 'template_mitarbeiterbewerbung'; // Diese Template-ID in EmailJS anlegen oder hier anpassen
+    var EMAILJS_CAREER_TEMPLATE_ID = 'template_mitarbeiter'; // Diese Template-ID in EmailJS anlegen oder hier anpassen
 
     document.addEventListener('DOMContentLoaded', function () {
         if (typeof emailjs !== 'undefined') {
@@ -978,7 +978,7 @@
                 if (typeof emailjs === 'undefined') {
                     applyBtn.classList.remove('loading');
                     applyBtn.disabled = false;
-                    showStatus('error', 'EmailJS konnte nicht geladen werden. Bitte prüfe die Internetverbindung oder sende die Bewerbung direkt per E-Mail.');
+                    showStatus('error', 'Die Bewerbung konnte gerade nicht gesendet werden. Bitte später erneut versuchen oder direkt an bau.tunjic@gmail.com schreiben.');
                     return;
                 }
 
