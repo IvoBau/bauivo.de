@@ -32,7 +32,7 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
     
-    <!-- Swiper CSS -->
+    <!-- Swiper CSS (nur Desktop) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     
     <!-- EmailJS -->
@@ -50,12 +50,10 @@
         body { -webkit-font-smoothing: antialiased; overscroll-behavior-y: none; }
         img { max-width: 100%; height: auto; display: block; }
 
-        /* ── NAVBAR – immer sichtbar ──────────────────────────────────── */
+        /* ── NAVBAR ──────────────────────────────────────────────────── */
         #navbar {
             position: fixed !important;
-            top: 0 !important;
-            left: 0 !important;
-            right: 0 !important;
+            top: 0 !important; left: 0 !important; right: 0 !important;
             width: 100% !important;
             z-index: 9999 !important;
             background-color: rgba(11, 15, 25, 0.98) !important;
@@ -63,11 +61,120 @@
             -webkit-backdrop-filter: blur(12px);
             backdrop-filter: blur(12px);
         }
-        #navbar.shadow-lg {
-            box-shadow: 0 8px 30px rgba(0,0,0,0.4) !important;
+        #navbar.shadow-lg { box-shadow: 0 8px 30px rgba(0,0,0,0.4) !important; }
+
+        /* ══════════════════════════════════════════════════════════════
+           MOBILE SLIDER – CSS Scroll Snap
+           Funktioniert auf iOS Safari, Chrome Android, Samsung Browser
+           ohne jegliche JavaScript-Abhängigkeit für die Darstellung.
+           
+           Struktur:
+             .snap-slider          → der scrollbare Container
+               .snap-slide         → einzelnes Bild-Item
+                 img               → das Bild
+             .snap-dots            → Dot-Indikatoren (JS-gesteuert)
+        ══════════════════════════════════════════════════════════════ */
+
+        /* Container nur auf Mobile sichtbar (< 640px) */
+        .snap-slider-wrap {
+            display: none; /* standardmäßig versteckt */
+            width: 100%;
+            background: #1a1f2b;
+            border-radius: 2px;
+            overflow: hidden;
+            position: relative;
+        }
+        @media (max-width: 639px) {
+            .snap-slider-wrap { display: block; }
         }
 
-        /* ── Swiper custom colours ───────────────────────────────────── */
+        /* Der eigentliche Scroll-Container */
+        .snap-slider {
+            display: flex;
+            overflow-x: scroll;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;         /* Firefox */
+            -ms-overflow-style: none;      /* IE/Edge */
+            /* KEIN will-change, KEIN transform – verhindert iOS Bugs */
+        }
+        .snap-slider::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+
+        /* Einzelne Slide */
+        .snap-slide {
+            flex: 0 0 100%;
+            width: 100%;
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+            /* Höhe über padding-bottom Trick: 16:9 auf Mobile, 16:7 auf größeren Phones */
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 */
+            height: 0;
+            overflow: hidden;
+            background: #1a1f2b;
+        }
+
+        /* Das Bild füllt den Slide vollständig aus */
+        .snap-slide img {
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+            object-position: center !important;
+            display: block !important;
+            /* Kein will-change, kein transform3d */
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+        }
+
+        /* Dot-Navigation */
+        .snap-dots {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            padding: 8px 0;
+            background: #1a1f2b;
+        }
+        .snap-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.35);
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            transition: background 0.25s, transform 0.25s;
+            flex-shrink: 0;
+        }
+        .snap-dot.active {
+            background: #d4af37;
+            transform: scale(1.2);
+        }
+
+        /* Caption (optional, wie beim Original) */
+        .snap-slide .slide-caption {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.72), transparent);
+            padding: 12px 16px;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* ══════════════════════════════════════════════════════════════
+           SWIPER (Desktop ≥ 640px) – unveränderte Logik,
+           aber nur auf nicht-mobilen Geräten initialisiert
+        ══════════════════════════════════════════════════════════════ */
+        .swiper-slider-wrap {
+            display: none; /* standardmäßig versteckt */
+            width: 100%;
+        }
+        @media (min-width: 640px) {
+            .swiper-slider-wrap { display: block; }
+        }
+
         .swiper-button-next,
         .swiper-button-prev {
             color: #d4af37 !important;
@@ -82,58 +189,22 @@
             border-radius: 50%;
             backdrop-filter: blur(4px);
         }
-        @media (max-width: 640px) {
-            .swiper-button-next, .swiper-button-prev { display: none !important; }
-        }
 
-        /* ══════════════════════════════════════════════════════════════
-           SWIPER SLIDES – Komplett neu aufgebaut für maximale
-           Kompatibilität auf iOS & Android
-           - Kein position:absolute auf img
-           - Kein will-change
-           - Aspect-Ratio-basiert, damit die Höhe immer korrekt ist
-        ══════════════════════════════════════════════════════════════ */
+        /* Desktop Swiper Slide-Höhe */
         .service-swiper {
             width: 100%;
-            display: block;
-            /* Verhindert "weißen Blitz" beim Slide-Wechsel */
             background-color: #1a1f2b;
         }
-
-        /* Slide-Höhe über aspect-ratio – kein festes px, kein vw-Hack */
         .service-swiper .swiper-slide {
             width: 100%;
-            /* aspect-ratio als primäre Methode */
-            aspect-ratio: 16 / 9;
+            aspect-ratio: 16 / 7;
             overflow: hidden;
             background-color: #1a1f2b;
-            /* position:relative nur für caption, NICHT für img */
             position: relative;
-            /* Kein transform, kein will-change – verhindert Android-Bugs */
         }
-
-        /* Fallback für Browser ohne aspect-ratio Support */
-        @supports not (aspect-ratio: 16 / 9) {
-            .service-swiper .swiper-slide {
-                height: 56vw;
-                max-height: 360px;
-            }
+        @supports not (aspect-ratio: 16 / 7) {
+            .service-swiper .swiper-slide { height: 380px; }
         }
-
-        @media (min-width: 640px) {
-            .service-swiper .swiper-slide {
-                aspect-ratio: 16 / 7;
-            }
-            @supports not (aspect-ratio: 16 / 7) {
-                .service-swiper .swiper-slide {
-                    height: 380px;
-                    max-height: 380px;
-                }
-            }
-        }
-
-        /* ── DAS ENTSCHEIDENDE FIX: img als Block-Element mit w/h 100% ── */
-        /* Kein position:absolute, kein top/left – das war der Bug! */
         .service-swiper .swiper-slide img {
             display: block !important;
             width: 100% !important;
@@ -141,41 +212,27 @@
             max-width: none !important;
             object-fit: cover !important;
             object-position: center !important;
-            /* Kein opacity-Hack, kein will-change, kein transform */
             -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
         }
-
-        /* Caption overlay */
         .service-swiper .swiper-slide .slide-caption {
             position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
+            bottom: 0; left: 0; right: 0;
             background: linear-gradient(to top, rgba(0,0,0,0.72), transparent);
             padding: 12px 16px;
             z-index: 2;
             pointer-events: none;
         }
+        .service-swiper .swiper-pagination { bottom: 8px !important; }
 
-        /* Pagination etwas tiefer setzen damit sie nicht abgeschnitten wird */
-        .service-swiper .swiper-pagination {
-            bottom: 8px !important;
-        }
-
-        /* ── Scroll-based fade-in ────────────────────────────────────── */
+        /* ── Allgemeines ─────────────────────────────────────────────── */
         .gsap-fade-up, .gsap-fade-left, .gsap-fade-right {
             will-change: transform, opacity;
         }
-
-        /* ── Touch-friendly tap targets ──────────────────────────────── */
         a, button, input[type="checkbox"], select { min-height: 44px; }
         label { cursor: pointer; }
-
-        /* ── Prevent overflow ────────────────────────────────────────── */
         section, footer, nav { max-width: 100vw; overflow-x: hidden; }
 
-        /* ── Sticky CTA bar (mobile only) ────────────────────────────── */
         #sticky-cta {
             display: none;
             position: fixed;
@@ -190,32 +247,14 @@
         }
         @media (max-width: 767px) { #sticky-cta { display: flex; } }
 
-        /* ── Hero ────────────────────────────────────────────────────── */
-        @media (max-width: 380px) {
-            #hero h1 { font-size: 1.75rem !important; }
-        }
-
-        /* ── Service block stack on mobile ──────────────────────────── */
-        @media (max-width: 1023px) {
-            .service-block > div { grid-column: span 12 !important; }
-        }
-
-        /* ── Process line hidden on mobile ──────────────────────────── */
+        @media (max-width: 380px) { #hero h1 { font-size: 1.75rem !important; } }
+        @media (max-width: 1023px) { .service-block > div { grid-column: span 12 !important; } }
         @media (max-width: 767px) { .process-line { display: none !important; } }
-
-        /* ── About deco hidden on mobile ─────────────────────────────── */
         @media (max-width: 767px) { .about-deco { display: none; } }
 
-        /* ── iOS zoom fix ────────────────────────────────────────────── */
-        input, textarea, select {
-            font-size: 16px !important;
-            border-radius: 4px;
-        }
-
-        /* ── Scroll offset for fixed navbar ──────────────────────────── */
+        input, textarea, select { font-size: 16px !important; border-radius: 4px; }
         :target { scroll-margin-top: 80px; }
 
-        /* ── Reduced motion ──────────────────────────────────────────── */
         @media (prefers-reduced-motion: reduce) {
             .gsap-fade-up, .gsap-fade-left, .gsap-fade-right {
                 opacity: 1 !important; transform: none !important;
@@ -223,48 +262,21 @@
             * { animation-duration: .01ms !important; transition-duration: .01ms !important; }
         }
 
-        /* ── Person card ─────────────────────────────────────────────── */
-        @media (max-width: 400px) {
-            .person-card { flex-direction: column !important; }
-            .person-card-photo { width: 100% !important; height: 200px !important; }
-        }
+        @media (max-width: 400px) { .person-card { flex-direction: column !important; } .person-card-photo { width: 100% !important; height: 200px !important; } }
+        @media (max-width: 400px) { .why-grid { grid-template-columns: 1fr !important; } }
+        @media (max-width: 400px) { .footer-grid { grid-template-columns: 1fr !important; } }
 
-        /* ── Why-us grid ─────────────────────────────────────────────── */
-        @media (max-width: 400px) {
-            .why-grid { grid-template-columns: 1fr !important; }
-        }
-
-        /* ── Footer ──────────────────────────────────────────────────── */
-        @media (max-width: 400px) {
-            .footer-grid { grid-template-columns: 1fr !important; }
-        }
-
-        /* ── Form status animation ───────────────────────────────────── */
         #form-status { transition: opacity 0.3s ease; }
-
-        /* ── Submit button loading state ─────────────────────────────── */
-        #submit-btn.loading {
-            opacity: 0.7;
-            cursor: not-allowed;
-            pointer-events: none;
-        }
+        #submit-btn.loading { opacity: 0.7; cursor: not-allowed; pointer-events: none; }
         #submit-btn .btn-spinner {
-            display: none;
-            width: 18px;
-            height: 18px;
-            border: 2px solid rgba(11,15,25,0.3);
-            border-top-color: #0b0f19;
-            border-radius: 50%;
-            animation: spin 0.7s linear infinite;
+            display: none; width: 18px; height: 18px;
+            border: 2px solid rgba(11,15,25,0.3); border-top-color: #0b0f19;
+            border-radius: 50%; animation: spin 0.7s linear infinite;
         }
         #submit-btn.loading .btn-spinner { display: block; }
         #submit-btn.loading .btn-text { display: none; }
         #submit-btn.loading .btn-icon { display: none; }
-
         @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* ── Mobile: mehr Platz für Navbar ───────────────────────────── */
-        body { padding-top: 0; }
     </style>
 </head>
 <body class="bg-ivo-dark text-ivo-light font-sans antialiased overflow-x-hidden selection:bg-ivo-gold selection:text-ivo-dark">
@@ -273,12 +285,9 @@
     <nav id="navbar" class="transition-all duration-300 py-3">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-12">
-
                 <div class="flex-shrink-0 cursor-pointer" onclick="window.scrollTo({top:0,behavior:'smooth'})">
                     <img src="IvoBau.png" alt="IvoBau Logo" class="h-10 sm:h-12 w-auto object-contain" style="filter:brightness(0) invert(1);" loading="eager" width="120" height="48">
                 </div>
-
-                <!-- Desktop nav -->
                 <div class="hidden md:flex space-x-6 lg:space-x-8 items-center">
                     <a href="#about"    class="text-gray-300 hover:text-ivo-gold transition-colors text-sm uppercase tracking-wide">Über uns</a>
                     <a href="#services" class="text-gray-300 hover:text-ivo-gold transition-colors text-sm uppercase tracking-wide">Leistungen</a>
@@ -286,15 +295,11 @@
                     <a href="#process"  class="text-gray-300 hover:text-ivo-gold transition-colors text-sm uppercase tracking-wide">Ablauf</a>
                     <a href="#contact"  class="bg-ivo-gold hover:bg-ivo-gold-hover text-ivo-dark px-5 py-2 rounded-sm font-semibold transition-all duration-300 hover:scale-105 text-sm whitespace-nowrap">Angebot anfragen</a>
                 </div>
-
-                <!-- Mobile hamburger -->
                 <button id="mobile-menu-btn" class="md:hidden text-white hover:text-ivo-gold p-2 -mr-2 rounded-md" aria-label="Menü öffnen" aria-expanded="false">
                     <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
                 </button>
             </div>
         </div>
-
-        <!-- Mobile dropdown -->
         <div id="mobile-menu" class="hidden md:hidden border-t border-white/10 absolute w-full shadow-2xl" style="background-color: #1a1f2b;">
             <div class="px-4 pt-3 pb-5 space-y-1">
                 <div class="px-3 py-3 border-b border-white/10 mb-3">
@@ -308,27 +313,21 @@
                     <a href="tel:015735255753" class="flex items-center justify-center gap-2 px-3 py-3 border border-ivo-gold text-ivo-gold rounded-sm font-semibold text-sm">
                         <i data-lucide="phone" class="w-4 h-4"></i> Anrufen
                     </a>
-                    <a href="#contact" class="flex items-center justify-center px-3 py-3 bg-ivo-gold text-ivo-dark rounded-sm font-semibold text-sm">
-                        Anfragen
-                    </a>
+                    <a href="#contact" class="flex items-center justify-center px-3 py-3 bg-ivo-gold text-ivo-dark rounded-sm font-semibold text-sm">Anfragen</a>
                 </div>
             </div>
         </div>
     </nav>
 
     <!-- ═══════════════════════════ HERO ════════════════════════════════ -->
-    <!-- pt-20 stellt sicher dass Content nicht hinter der Navbar verschwindet -->
     <section id="hero" class="relative min-h-screen flex items-center justify-center pt-20">
         <div class="absolute inset-0 z-0">
             <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=70"
                  alt="Moderner Innenausbau"
                  class="w-full h-full object-cover opacity-30"
-                 loading="eager"
-                 decoding="async"
-                 fetchpriority="high">
+                 loading="eager" decoding="async" fetchpriority="high">
             <div class="absolute inset-0 bg-gradient-to-b from-ivo-dark/80 via-ivo-dark/60 to-ivo-dark"></div>
         </div>
-
         <div class="relative z-10 max-w-4xl mx-auto px-5 sm:px-8 text-center hero-content">
             <span class="text-ivo-gold font-medium tracking-[0.18em] uppercase mb-4 block text-xs sm:text-sm">Premium Handwerk & Renovierung</span>
             <h1 class="font-serif text-[2.1rem] leading-tight sm:text-5xl md:text-7xl font-bold text-white mb-5">
@@ -376,13 +375,11 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="relative gsap-fade-left mt-4 md:mt-0">
                     <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=75"
                          alt="Handwerkliche Präzision"
                          class="rounded-sm shadow-2xl relative z-10 w-full"
-                         loading="lazy"
-                         decoding="async">
+                         loading="lazy" decoding="async">
                     <div class="about-deco absolute -bottom-5 -right-5 w-full h-full border-2 border-ivo-gold rounded-sm z-0"></div>
                 </div>
             </div>
@@ -399,9 +396,8 @@
 
             <div class="space-y-16 sm:space-y-24">
 
-                <!-- Service 1: Wärmedämmung -->
+                <!-- ── Service 1: Wärmedämmung ─────────────────────────── -->
                 <div class="service-block grid lg:grid-cols-12 gap-8 lg:gap-12 items-center gsap-fade-up">
-                    <!-- Text: auf Mobile NACH dem Bild -->
                     <div class="lg:col-span-5 order-2 lg:order-1">
                         <h4 class="text-lg sm:text-2xl font-serif text-white mb-3 sm:mb-4">Kellerdeckendämmung & Wärmedämmung</h4>
                         <p class="text-gray-400 mb-5 text-sm sm:text-base leading-relaxed">Effiziente Dämmungslösungen reduzieren Heizkosten und steigern den Wohnkomfort erheblich. Wir verarbeiten ausschließlich hochisolierende Premium-Materialien nach neuesten Energiestandards.</p>
@@ -411,61 +407,83 @@
                             <li class="flex items-center gap-3 text-gray-300 text-sm sm:text-base"><i data-lucide="check-circle" class="text-ivo-gold w-5 h-5 flex-shrink-0"></i> Fachgerechte, wärmebrückenfreie Montage</li>
                         </ul>
                     </div>
-                    <!-- Swiper: auf Mobile ZUERST -->
                     <div class="lg:col-span-7 order-1 lg:order-2 w-full">
-                        <div class="swiper service-swiper rounded-sm overflow-hidden shadow-2xl">
-                            <div class="swiper-wrapper">
-                                <div class="swiper-slide">
+
+                        <!-- MOBILE: CSS Scroll Snap -->
+                        <div class="snap-slider-wrap rounded-sm overflow-hidden shadow-2xl">
+                            <div class="snap-slider" data-snap-id="s1">
+                                <div class="snap-slide">
                                     <img src="Pictures/Graphit_EPS_Hanau_1.jpg" alt="Graphit EPS Hanau – Vorher" loading="eager" decoding="async">
                                 </div>
-                                <div class="swiper-slide">
-                                    <img src="Pictures/Graphit_EPS_Hanau_2.jpg" alt="Graphit EPS Hanau – Nachher" loading="eager" decoding="async">
+                                <div class="snap-slide">
+                                    <img src="Pictures/Graphit_EPS_Hanau_2.jpg" alt="Graphit EPS Hanau – Nachher" loading="lazy" decoding="async">
                                 </div>
-                                <div class="swiper-slide">
+                                <div class="snap-slide">
                                     <img src="Pictures/20250402_123825.jpg" alt="Wärmedämmung Detailarbeit" loading="lazy" decoding="async">
                                 </div>
-                                <div class="swiper-slide">
+                                <div class="snap-slide">
                                     <img src="Pictures/Kellerdeckendämmung_Graphit_EPS_1.jpg" alt="Kellerdeckendämmung Graphit EPS" loading="lazy" decoding="async">
                                 </div>
-                                <div class="swiper-slide">
+                                <div class="snap-slide">
                                     <img src="Pictures/Kellerdeckendämmung_Graphit_EPS_3.jpg" alt="Kellerdeckendämmung fertig" loading="lazy" decoding="async">
                                 </div>
                             </div>
-                            <div class="swiper-pagination"></div>
-                            <div class="swiper-button-prev"></div>
-                            <div class="swiper-button-next"></div>
+                            <div class="snap-dots" id="dots-s1"></div>
                         </div>
+
+                        <!-- DESKTOP: Swiper -->
+                        <div class="swiper-slider-wrap rounded-sm overflow-hidden shadow-2xl">
+                            <div class="swiper service-swiper">
+                                <div class="swiper-wrapper">
+                                    <div class="swiper-slide"><img src="Pictures/Graphit_EPS_Hanau_1.jpg" alt="Graphit EPS Hanau – Vorher" loading="eager" decoding="async"></div>
+                                    <div class="swiper-slide"><img src="Pictures/Graphit_EPS_Hanau_2.jpg" alt="Graphit EPS Hanau – Nachher" loading="eager" decoding="async"></div>
+                                    <div class="swiper-slide"><img src="Pictures/20250402_123825.jpg" alt="Wärmedämmung Detailarbeit" loading="lazy" decoding="async"></div>
+                                    <div class="swiper-slide"><img src="Pictures/Kellerdeckendämmung_Graphit_EPS_1.jpg" alt="Kellerdeckendämmung Graphit EPS" loading="lazy" decoding="async"></div>
+                                    <div class="swiper-slide"><img src="Pictures/Kellerdeckendämmung_Graphit_EPS_3.jpg" alt="Kellerdeckendämmung fertig" loading="lazy" decoding="async"></div>
+                                </div>
+                                <div class="swiper-pagination"></div>
+                                <div class="swiper-button-prev"></div>
+                                <div class="swiper-button-next"></div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
-                <!-- Service 2: Trockenbau -->
+                <!-- ── Service 2: Trockenbau ───────────────────────────── -->
                 <div class="service-block grid lg:grid-cols-12 gap-8 lg:gap-12 items-center gsap-fade-up">
                     <div class="lg:col-span-7 w-full order-1">
-                        <div class="swiper service-swiper rounded-sm overflow-hidden shadow-2xl">
-                            <div class="swiper-wrapper">
-                                <div class="swiper-slide">
-                                    <img src="Pictures/11.png" alt="Trockenbau Decke" loading="eager" decoding="async">
-                                </div>
-                                <div class="swiper-slide">
-                                    <img src="Pictures/22.jpg" alt="Trockenbau Innenausbau" loading="eager" decoding="async">
-                                </div>
-                                <div class="swiper-slide">
-                                    <img src="Pictures/TB_Badezimmer_2.jpg" alt="Trockenbau Badezimmer" loading="lazy" decoding="async">
-                                </div>
-                                <div class="swiper-slide">
-                                    <img src="Pictures/Laibung_3.jpg" alt="Laibung Arbeit" loading="lazy" decoding="async">
-                                </div>
-                                <div class="swiper-slide">
-                                    <img src="Pictures/Laibung_1.jpg" alt="Laibung Fenster" loading="lazy" decoding="async">
-                                </div>
-                                <div class="swiper-slide">
-                                    <img src="Pictures/Laibung_2.jpg" alt="Laibung Vorher" loading="lazy" decoding="async">
-                                </div>
+
+                        <!-- MOBILE: CSS Scroll Snap -->
+                        <div class="snap-slider-wrap rounded-sm overflow-hidden shadow-2xl">
+                            <div class="snap-slider" data-snap-id="s2">
+                                <div class="snap-slide"><img src="Pictures/11.png" alt="Trockenbau Decke" loading="eager" decoding="async"></div>
+                                <div class="snap-slide"><img src="Pictures/22.jpg" alt="Trockenbau Innenausbau" loading="lazy" decoding="async"></div>
+                                <div class="snap-slide"><img src="Pictures/TB_Badezimmer_2.jpg" alt="Trockenbau Badezimmer" loading="lazy" decoding="async"></div>
+                                <div class="snap-slide"><img src="Pictures/Laibung_3.jpg" alt="Laibung Arbeit" loading="lazy" decoding="async"></div>
+                                <div class="snap-slide"><img src="Pictures/Laibung_1.jpg" alt="Laibung Fenster" loading="lazy" decoding="async"></div>
+                                <div class="snap-slide"><img src="Pictures/Laibung_2.jpg" alt="Laibung Vorher" loading="lazy" decoding="async"></div>
                             </div>
-                            <div class="swiper-pagination"></div>
-                            <div class="swiper-button-prev"></div>
-                            <div class="swiper-button-next"></div>
+                            <div class="snap-dots" id="dots-s2"></div>
                         </div>
+
+                        <!-- DESKTOP: Swiper -->
+                        <div class="swiper-slider-wrap rounded-sm overflow-hidden shadow-2xl">
+                            <div class="swiper service-swiper">
+                                <div class="swiper-wrapper">
+                                    <div class="swiper-slide"><img src="Pictures/11.png" alt="Trockenbau Decke" loading="eager" decoding="async"></div>
+                                    <div class="swiper-slide"><img src="Pictures/22.jpg" alt="Trockenbau Innenausbau" loading="eager" decoding="async"></div>
+                                    <div class="swiper-slide"><img src="Pictures/TB_Badezimmer_2.jpg" alt="Trockenbau Badezimmer" loading="lazy" decoding="async"></div>
+                                    <div class="swiper-slide"><img src="Pictures/Laibung_3.jpg" alt="Laibung Arbeit" loading="lazy" decoding="async"></div>
+                                    <div class="swiper-slide"><img src="Pictures/Laibung_1.jpg" alt="Laibung Fenster" loading="lazy" decoding="async"></div>
+                                    <div class="swiper-slide"><img src="Pictures/Laibung_2.jpg" alt="Laibung Vorher" loading="lazy" decoding="async"></div>
+                                </div>
+                                <div class="swiper-pagination"></div>
+                                <div class="swiper-button-prev"></div>
+                                <div class="swiper-button-next"></div>
+                            </div>
+                        </div>
+
                     </div>
                     <div class="lg:col-span-5 order-2">
                         <h4 class="text-lg sm:text-2xl font-serif text-white mb-3 sm:mb-4">Trockenbau & Laibungen – Von der 3D-Planung bis zur Realisierung</h4>
@@ -479,7 +497,7 @@
                     </div>
                 </div>
 
-                <!-- Service 3: Boden -->
+                <!-- ── Service 3: Boden ────────────────────────────────── -->
                 <div class="service-block grid lg:grid-cols-12 gap-8 lg:gap-12 items-center gsap-fade-up">
                     <div class="lg:col-span-5 order-2 lg:order-1">
                         <h4 class="text-lg sm:text-2xl font-serif text-white mb-3 sm:mb-4">Boden, Trockenestrich & Spezialarbeiten</h4>
@@ -491,28 +509,43 @@
                         </ul>
                     </div>
                     <div class="lg:col-span-7 order-1 lg:order-2 w-full">
-                        <div class="swiper service-swiper rounded-sm overflow-hidden shadow-2xl">
-                            <div class="swiper-wrapper">
-                                <div class="swiper-slide">
-                                    <img src="Pictures/Trockenestrisch_3.jpg" alt="Trockenestrich Dämmschicht" loading="eager" decoding="async">
-                                </div>
-                                <div class="swiper-slide">
-                                    <img src="Pictures/Trockenestrisch_5.jpg" alt="Trockenestrich Platten" loading="lazy" decoding="async">
-                                </div>
-                                <div class="swiper-slide">
-                                    <img src="Pictures/Trockenestrisch_1.jpg" alt="Trockenestrich Schüttung" loading="lazy" decoding="async">
-                                </div>
-                                <div class="swiper-slide">
+
+                        <!-- MOBILE: CSS Scroll Snap -->
+                        <div class="snap-slider-wrap rounded-sm overflow-hidden shadow-2xl">
+                            <div class="snap-slider" data-snap-id="s3">
+                                <div class="snap-slide"><img src="Pictures/Trockenestrisch_3.jpg" alt="Trockenestrich Dämmschicht" loading="eager" decoding="async"></div>
+                                <div class="snap-slide"><img src="Pictures/Trockenestrisch_5.jpg" alt="Trockenestrich Platten" loading="lazy" decoding="async"></div>
+                                <div class="snap-slide"><img src="Pictures/Trockenestrisch_1.jpg" alt="Trockenestrich Schüttung" loading="lazy" decoding="async"></div>
+                                <div class="snap-slide">
                                     <img src="Pictures/Filzputz.jpg" alt="Filzputz Oberfläche" loading="lazy" decoding="async">
                                     <div class="slide-caption">
-                                        <span class="text-white font-semibold tracking-widest uppercase text-xs sm:text-sm">Filzputz</span>
+                                        <span class="text-white font-semibold tracking-widest uppercase text-xs">Filzputz</span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="swiper-pagination"></div>
-                            <div class="swiper-button-prev"></div>
-                            <div class="swiper-button-next"></div>
+                            <div class="snap-dots" id="dots-s3"></div>
                         </div>
+
+                        <!-- DESKTOP: Swiper -->
+                        <div class="swiper-slider-wrap rounded-sm overflow-hidden shadow-2xl">
+                            <div class="swiper service-swiper">
+                                <div class="swiper-wrapper">
+                                    <div class="swiper-slide"><img src="Pictures/Trockenestrisch_3.jpg" alt="Trockenestrich Dämmschicht" loading="eager" decoding="async"></div>
+                                    <div class="swiper-slide"><img src="Pictures/Trockenestrisch_5.jpg" alt="Trockenestrich Platten" loading="lazy" decoding="async"></div>
+                                    <div class="swiper-slide"><img src="Pictures/Trockenestrisch_1.jpg" alt="Trockenestrich Schüttung" loading="lazy" decoding="async"></div>
+                                    <div class="swiper-slide">
+                                        <img src="Pictures/Filzputz.jpg" alt="Filzputz Oberfläche" loading="lazy" decoding="async">
+                                        <div class="slide-caption">
+                                            <span class="text-white font-semibold tracking-widest uppercase text-xs sm:text-sm">Filzputz</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="swiper-pagination"></div>
+                                <div class="swiper-button-prev"></div>
+                                <div class="swiper-button-next"></div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
@@ -527,7 +560,6 @@
                 <h2 class="text-ivo-gold text-xs font-bold tracking-widest uppercase mb-2">Warum IvoBau</h2>
                 <h3 class="font-serif text-2xl sm:text-4xl text-white">Ihre Vorteile auf einen Blick</h3>
             </div>
-
             <div class="why-grid grid sm:grid-cols-2 md:grid-cols-3 gap-5 sm:gap-8">
                 <div class="bg-ivo-anthracite p-6 sm:p-8 rounded-sm border border-white/5 hover:border-ivo-gold/30 transition-colors gsap-fade-up">
                     <i data-lucide="shield-check" class="text-ivo-gold w-10 h-10 sm:w-12 sm:h-12 mb-5"></i>
@@ -555,7 +587,6 @@
                 <h2 class="text-ivo-gold text-xs font-bold tracking-widest uppercase mb-2">Der Ablauf</h2>
                 <h3 class="font-serif text-2xl sm:text-4xl text-white">So arbeiten wir zusammen</h3>
             </div>
-
             <div class="relative">
                 <div class="process-line hidden md:block absolute top-[28px] left-[12.5%] w-3/4 h-0.5 bg-white/10"></div>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-5 sm:gap-8">
@@ -587,23 +618,17 @@
     <!-- ═══════════════════════════ CONTACT ═════════════════════════════ -->
     <section id="contact" class="py-16 sm:py-24 bg-ivo-dark relative overflow-hidden pb-28 sm:pb-24">
         <div class="absolute right-0 top-0 w-1/2 sm:w-1/3 h-full bg-ivo-gold/5 blur-[120px] pointer-events-none"></div>
-
         <div class="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 relative z-10">
             <div class="grid lg:grid-cols-2 gap-10 lg:gap-16">
-
                 <div class="gsap-fade-right flex flex-col gap-6 sm:gap-8">
                     <div>
                         <h2 class="text-ivo-gold text-xs font-bold tracking-widest uppercase mb-2">Kontaktieren Sie uns</h2>
                         <h3 class="font-serif text-2xl sm:text-4xl text-white mb-3 sm:mb-4">Bereit für Ihr Projekt?</h3>
                         <p class="text-gray-400 text-sm sm:text-base">Lassen Sie uns über Ihre Vorstellungen sprechen. Füllen Sie das Formular aus und wir melden uns zeitnah.</p>
                     </div>
-
-                    <!-- Person card -->
                     <div class="person-card bg-ivo-anthracite border border-white/5 rounded-sm overflow-hidden flex flex-row items-stretch">
                         <div class="person-card-photo w-32 sm:w-44 flex-shrink-0">
-                            <img src="Pictures/ivoT.jpg" alt="Ivo Tunjić – Inhaber IvoBau"
-                                 class="w-full h-full object-cover object-top"
-                                 loading="lazy">
+                            <img src="Pictures/ivoT.jpg" alt="Ivo Tunjić – Inhaber IvoBau" class="w-full h-full object-cover object-top" loading="lazy">
                         </div>
                         <div class="flex flex-col justify-center p-4 sm:p-6 gap-3 sm:gap-5 min-w-0">
                             <div>
@@ -633,7 +658,6 @@
                     </div>
                 </div>
 
-                <!-- Right: Form -->
                 <div class="bg-ivo-anthracite p-5 sm:p-8 rounded-sm shadow-2xl border border-white/5 gsap-fade-left">
                     <form id="contact-form" class="space-y-5" novalidate>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
@@ -648,7 +672,6 @@
                                        class="w-full bg-ivo-dark border border-white/10 rounded-sm px-4 py-3 text-white focus:outline-none focus:border-ivo-gold transition-colors">
                             </div>
                         </div>
-
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                             <div>
                                 <label for="email" class="block text-xs sm:text-sm font-medium text-gray-400 mb-1.5">E-Mail Adresse *</label>
@@ -669,19 +692,16 @@
                                 </select>
                             </div>
                         </div>
-
                         <div>
                             <label for="address" class="block text-xs sm:text-sm font-medium text-gray-400 mb-1.5">Ort / Projektadresse</label>
                             <input type="text" id="address" name="address" autocomplete="street-address"
                                    class="w-full bg-ivo-dark border border-white/10 rounded-sm px-4 py-3 text-white focus:outline-none focus:border-ivo-gold transition-colors">
                         </div>
-
                         <div>
                             <label for="message" class="block text-xs sm:text-sm font-medium text-gray-400 mb-1.5">Ihre Nachricht *</label>
                             <textarea id="message" name="message" rows="4" required
                                       class="w-full bg-ivo-dark border border-white/10 rounded-sm px-4 py-3 text-white focus:outline-none focus:border-ivo-gold transition-colors resize-none"></textarea>
                         </div>
-
                         <div class="flex items-start gap-3">
                             <div class="flex items-center pt-0.5">
                                 <input id="gdpr" name="gdpr" type="checkbox" required
@@ -691,14 +711,12 @@
                                 Ich stimme der Verarbeitung meiner Daten gemäß der <a href="datenschutz.html" class="text-ivo-gold hover:underline" target="_blank">Datenschutzerklärung</a> zu.
                             </label>
                         </div>
-
                         <button type="submit" id="submit-btn"
                                 class="w-full bg-ivo-gold text-ivo-dark font-bold py-4 rounded-sm hover:bg-ivo-gold-hover transition-colors flex justify-center items-center gap-2 text-sm sm:text-base">
                             <span class="btn-text">Anfrage senden</span>
                             <i data-lucide="send" class="w-4 h-4 btn-icon"></i>
                             <div class="btn-spinner"></div>
                         </button>
-
                         <div id="form-status" class="hidden p-4 rounded-sm text-sm font-medium text-center"></div>
                     </form>
                 </div>
@@ -718,7 +736,6 @@
                         Ihr vertrauensvoller Partner für Premium-Innenausbau, Wärmedämmung und Renovierungen. Präzision und Qualität aus Meisterhand.
                     </p>
                 </div>
-
                 <div>
                     <h4 class="text-white font-bold mb-4 sm:mb-6 text-sm sm:text-base">Kontakt</h4>
                     <ul class="space-y-2 sm:space-y-3 text-xs sm:text-sm text-gray-400">
@@ -727,7 +744,6 @@
                         <li>Deutschland</li>
                     </ul>
                 </div>
-
                 <div>
                     <h4 class="text-white font-bold mb-4 sm:mb-6 text-sm sm:text-base">Leistungen</h4>
                     <ul class="space-y-2 sm:space-y-3 text-xs sm:text-sm text-gray-400">
@@ -738,7 +754,6 @@
                         <li>Sanierung</li>
                     </ul>
                 </div>
-
                 <div>
                     <h4 class="text-white font-bold mb-4 sm:mb-6 text-sm sm:text-base">Rechtliches</h4>
                     <ul class="space-y-2 sm:space-y-3 text-xs sm:text-sm text-gray-400">
@@ -747,7 +762,6 @@
                     </ul>
                 </div>
             </div>
-
             <div class="border-t border-white/10 pt-6 flex flex-col md:flex-row justify-between items-center gap-3">
                 <p class="text-gray-500 text-xs sm:text-sm">© <span id="year"></span> IvoBau. Alle Rechte vorbehalten.</p>
             </div>
@@ -769,43 +783,31 @@
     <!-- ═══════════════════════════ SCRIPTS ═════════════════════════════ -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" defer></script>
-    
-    <!-- Swiper JS – synchron laden damit Swiper sofort initialisiert wird -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
     <script>
     // ════════════════════════════════════════════════════════════════
-    // EmailJS Konfiguration
+    // EmailJS
     // ════════════════════════════════════════════════════════════════
-    var EMAILJS_PUBLIC_KEY    = 'POu8H-e_AK6DIEPBK';      // z.B. 'abc123XYZ
-    var EMAILJS_SERVICE_ID    = 'service_canpm6o';      // z.B. 'service_ivobau'
-    var EMAILJS_TEMPLATE_ID   = 'template_f6fkex9';     // z.B. 'template_anfrage'
+    var EMAILJS_PUBLIC_KEY  = 'POu8H-e_AK6DIEPBK';
+    var EMAILJS_SERVICE_ID  = 'service_canpm6o';
+    var EMAILJS_TEMPLATE_ID = 'template_f6fkex9';
 
     // ════════════════════════════════════════════════════════════════
-    // Swiper sofort initialisieren – KEIN DOMContentLoaded warten
-    // Grund: Swiper muss die Slide-Dimensionen beim ersten Paint kennen
+    // DESKTOP SWIPER – nur auf Viewports ≥ 640px initialisieren
     // ════════════════════════════════════════════════════════════════
     function initSwipers() {
+        if (window.innerWidth < 640) return; // Mobile nutzt Scroll Snap
         document.querySelectorAll('.service-swiper').forEach(function (el) {
             new Swiper(el, {
                 loop: true,
-                // ── 5 Sekunden pro Bild (geändert von 4500ms) ──────────
-                autoplay: {
-                    delay: 5000,
-                    disableOnInteraction: false,
-                    pauseOnMouseEnter: true
-                },
+                autoplay: { delay: 5000, disableOnInteraction: false, pauseOnMouseEnter: true },
                 speed: 600,
-                pagination: {
-                    el: el.querySelector('.swiper-pagination'),
-                    clickable: true,
-                    dynamicBullets: false
-                },
+                pagination: { el: el.querySelector('.swiper-pagination'), clickable: true },
                 navigation: {
                     nextEl: el.querySelector('.swiper-button-next'),
                     prevEl: el.querySelector('.swiper-button-prev')
                 },
-                // ── Touch-Optimierungen für iOS & Android ──────────────
                 touchRatio: 1,
                 grabCursor: true,
                 touchAngle: 45,
@@ -813,47 +815,75 @@
                 longSwipesRatio: 0.3,
                 slidesPerView: 1,
                 spaceBetween: 0,
-                // touchStartPreventDefault MUSS false bleiben
-                // sonst funktioniert iOS-Scroll nicht
-                touchStartPreventDefault: false,
-                // watchSlidesProgress: kein Bedarf, spart Performance
-                // resizeObserver: automatisch in Swiper 11
-                on: {
-                    // Nach jedem Slide-Wechsel sicherstellen dass
-                    // Bilder im aktiven Slide wirklich geladen sind
-                    slideChange: function (swiper) {
-                        var activeSlide = swiper.slides[swiper.activeIndex];
-                        if (activeSlide) {
-                            var img = activeSlide.querySelector('img');
-                            if (img && !img.complete && img.dataset.src) {
-                                img.src = img.dataset.src;
-                            }
-                        }
-                    }
-                }
+                touchStartPreventDefault: false
             });
         });
     }
 
-    // Swiper initialisieren sobald DOM bereit ist
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initSwipers);
     } else {
         initSwipers();
     }
 
+    // ════════════════════════════════════════════════════════════════
+    // MOBILE CSS SCROLL SNAP DOTS
+    // Dot-Indikatoren werden per IntersectionObserver aktualisiert.
+    // Keine Autoplay-Logik nötig – der Nutzer wischt selbst.
+    // ════════════════════════════════════════════════════════════════
+    function initSnapSliders() {
+        document.querySelectorAll('.snap-slider').forEach(function (slider) {
+            var id      = slider.getAttribute('data-snap-id');
+            var dotsEl  = document.getElementById('dots-' + id);
+            var slides  = slider.querySelectorAll('.snap-slide');
+            if (!dotsEl || slides.length === 0) return;
+
+            // Dots erstellen
+            slides.forEach(function (_, i) {
+                var dot = document.createElement('button');
+                dot.className = 'snap-dot' + (i === 0 ? ' active' : '');
+                dot.setAttribute('aria-label', 'Bild ' + (i + 1));
+                dot.addEventListener('click', function () {
+                    slides[i].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+                });
+                dotsEl.appendChild(dot);
+            });
+
+            var dots = dotsEl.querySelectorAll('.snap-dot');
+
+            // IntersectionObserver: welcher Slide ist sichtbar?
+            var observer = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        var idx = Array.from(slides).indexOf(entry.target);
+                        dots.forEach(function (d, i) {
+                            d.classList.toggle('active', i === idx);
+                        });
+                    }
+                });
+            }, {
+                root: slider,
+                threshold: 0.6   // Slide muss zu 60% sichtbar sein
+            });
+
+            slides.forEach(function (slide) { observer.observe(slide); });
+        });
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
 
-        // ── EmailJS initialisieren ────────────────────────────────────
+        initSnapSliders();
+
+        // ── EmailJS ───────────────────────────────────────────────
         if (typeof emailjs !== 'undefined') {
             emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
         }
 
-        // ── Footer year ───────────────────────────────────────────────
+        // ── Footer year ───────────────────────────────────────────
         var yearEl = document.getElementById('year');
         if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-        // ── Mobile menu ───────────────────────────────────────────────
+        // ── Mobile menu ───────────────────────────────────────────
         var menuBtn    = document.getElementById('mobile-menu-btn');
         var mobileMenu = document.getElementById('mobile-menu');
         if (menuBtn && mobileMenu) {
@@ -869,7 +899,7 @@
             });
         }
 
-        // ── Navbar shadow on scroll ───────────────────────────────────
+        // ── Navbar shadow ─────────────────────────────────────────
         var navbar = document.getElementById('navbar');
         if (navbar) {
             window.addEventListener('scroll', function () {
@@ -877,47 +907,38 @@
             }, { passive: true });
         }
 
-        // ── Sticky CTA: ausblenden wenn Kontaktformular sichtbar ──────
+        // ── Sticky CTA ────────────────────────────────────────────
         var stickyCta  = document.getElementById('sticky-cta');
         var contactSec = document.getElementById('contact');
         if (stickyCta && contactSec && 'IntersectionObserver' in window) {
             new IntersectionObserver(function (entries) {
-                stickyCta.style.opacity = entries[0].isIntersecting ? '0' : '1';
+                stickyCta.style.opacity       = entries[0].isIntersecting ? '0' : '1';
                 stickyCta.style.pointerEvents = entries[0].isIntersecting ? 'none' : 'auto';
             }, { threshold: 0.1 }).observe(contactSec);
         }
 
-        // ── GSAP Animationen ──────────────────────────────────────────
+        // ── GSAP ──────────────────────────────────────────────────
         var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         if (!prefersReduced && typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
             gsap.registerPlugin(ScrollTrigger);
-
             gsap.utils.toArray('.gsap-fade-up').forEach(function (el) {
-                gsap.fromTo(el, { opacity: 0, y: 30 }, {
-                    opacity: 1, y: 0, duration: 0.75, ease: 'power2.out',
-                    scrollTrigger: { trigger: el, start: 'top 90%', toggleActions: 'play none none none' }
-                });
+                gsap.fromTo(el, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.75, ease: 'power2.out',
+                    scrollTrigger: { trigger: el, start: 'top 90%', toggleActions: 'play none none none' } });
             });
             gsap.utils.toArray('.gsap-fade-left').forEach(function (el) {
-                gsap.fromTo(el, { opacity: 0, x: 40 }, {
-                    opacity: 1, x: 0, duration: 0.8, ease: 'power2.out',
-                    scrollTrigger: { trigger: el, start: 'top 90%', toggleActions: 'play none none none' }
-                });
+                gsap.fromTo(el, { opacity: 0, x: 40 }, { opacity: 1, x: 0, duration: 0.8, ease: 'power2.out',
+                    scrollTrigger: { trigger: el, start: 'top 90%', toggleActions: 'play none none none' } });
             });
             gsap.utils.toArray('.gsap-fade-right').forEach(function (el) {
-                gsap.fromTo(el, { opacity: 0, x: -40 }, {
-                    opacity: 1, x: 0, duration: 0.8, ease: 'power2.out',
-                    scrollTrigger: { trigger: el, start: 'top 90%', toggleActions: 'play none none none' }
-                });
+                gsap.fromTo(el, { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.8, ease: 'power2.out',
+                    scrollTrigger: { trigger: el, start: 'top 90%', toggleActions: 'play none none none' } });
             });
         }
 
-        // ── Lucide Icons ──────────────────────────────────────────────
+        // ── Lucide ────────────────────────────────────────────────
         if (typeof lucide !== 'undefined') lucide.createIcons();
 
-        // ════════════════════════════════════════════════════════════
-        // KONTAKTFORMULAR
-        // ════════════════════════════════════════════════════════════
+        // ── Kontaktformular ───────────────────────────────────────
         var form      = document.getElementById('contact-form');
         var status    = document.getElementById('form-status');
         var submitBtn = document.getElementById('submit-btn');
@@ -925,7 +946,6 @@
         if (form && status && submitBtn) {
             form.addEventListener('submit', function (e) {
                 e.preventDefault();
-
                 var name    = document.getElementById('name').value.trim();
                 var phone   = document.getElementById('phone').value.trim();
                 var email   = document.getElementById('email').value.trim();
@@ -938,57 +958,41 @@
                     showStatus('error', 'Bitte füllen Sie alle Pflichtfelder aus.');
                     return;
                 }
-
                 submitBtn.classList.add('loading');
 
                 if (EMAILJS_PUBLIC_KEY === 'DEIN_PUBLIC_KEY') {
-                    setTimeout(function() {
+                    setTimeout(function () {
                         submitBtn.classList.remove('loading');
-                        showStatus('warning',
-                            '⚠️ EmailJS noch nicht eingerichtet. Bitte folge der Anleitung in emailjs-setup.md.');
+                        showStatus('warning', '⚠️ EmailJS noch nicht eingerichtet.');
                     }, 800);
                     return;
                 }
 
-                var templateParams = {
-                    from_name:       name,
-                    from_email:      email,
-                    from_phone:      phone,
-                    service_type:    service || 'Nicht angegeben',
+                emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+                    from_name: name, from_email: email, from_phone: phone,
+                    service_type: service || 'Nicht angegeben',
                     project_address: address || 'Nicht angegeben',
-                    message:         message,
-                    to_email:        'bau.tunjic@gmail.com',
-                    reply_to:        email
-                };
-
-                emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
-                    .then(function () {
-                        submitBtn.classList.remove('loading');
-                        showStatus('success',
-                            '✅ Vielen Dank! Ihre Anfrage wurde erfolgreich gesendet. Wir melden uns so schnell wie möglich.');
-                        form.reset();
-                        status.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                        setTimeout(function () { status.classList.add('hidden'); }, 8000);
-                    })
-                    .catch(function (error) {
-                        submitBtn.classList.remove('loading');
-                        console.error('EmailJS Fehler:', error);
-                        showStatus('error',
-                            '❌ Fehler beim Senden. Bitte versuchen Sie es erneut oder rufen Sie uns direkt an: 0157 35255753');
-                    });
+                    message: message, to_email: 'bau.tunjic@gmail.com', reply_to: email
+                }).then(function () {
+                    submitBtn.classList.remove('loading');
+                    showStatus('success', '✅ Vielen Dank! Ihre Anfrage wurde erfolgreich gesendet. Wir melden uns so schnell wie möglich.');
+                    form.reset();
+                    status.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    setTimeout(function () { status.classList.add('hidden'); }, 8000);
+                }).catch(function (error) {
+                    submitBtn.classList.remove('loading');
+                    console.error('EmailJS Fehler:', error);
+                    showStatus('error', '❌ Fehler beim Senden. Bitte versuchen Sie es erneut oder rufen Sie uns direkt an: 0157 35255753');
+                });
             });
         }
 
         function showStatus(type, message) {
             status.textContent = message;
             status.className = 'p-4 rounded-sm text-sm font-medium text-center ';
-            if (type === 'success') {
-                status.className += 'bg-green-900/40 text-green-300 border border-green-700';
-            } else if (type === 'error') {
-                status.className += 'bg-red-900/40 text-red-300 border border-red-700';
-            } else if (type === 'warning') {
-                status.className += 'bg-yellow-900/40 text-yellow-300 border border-yellow-700';
-            }
+            if (type === 'success') status.className += 'bg-green-900/40 text-green-300 border border-green-700';
+            else if (type === 'error') status.className += 'bg-red-900/40 text-red-300 border border-red-700';
+            else if (type === 'warning') status.className += 'bg-yellow-900/40 text-yellow-300 border border-yellow-700';
             status.classList.remove('hidden');
         }
     });
