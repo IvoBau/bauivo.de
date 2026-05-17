@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="de" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#0b0f19">
+    <title>IvoBau | Bewerbung als Mitarbeiter</title>
+    <meta name="description" content="Bewirb dich bei IvoBau als Mitarbeiter im Innenausbau, Trockenbau, Wärmedämmung und Renovierung.">
+    <link rel="icon" type="image/png" href="IvoBau.png">
+    <link rel="apple-touch-icon" href="IvoBau.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'ivo-dark': '#0b0f19',
+                        'ivo-anthracite': '#1a1f2b',
+                        'ivo-gold': '#d4af37',
+                        'ivo-gold-hover': '#b5952f',
+                        'ivo-light': '#f8fafc'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        *, *::before, *::after { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+        body { -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+        img { max-width: 100%; height: auto; display: block; }
+        a, button, input, select, textarea { min-height: 44px; }
+        input, select, textarea { font-size: 16px !important; }
+        :target { scroll-margin-top: 90px; }
+
+        #navbar {
+            position: fixed !important;
+            top: 0 !important; left: 0 !important; right: 0 !important;
+            width: 100% !important;
+            z-index: 9999 !important;
+            background: rgba(11, 15, 25, 0.96) !important;
+            border-bottom: 1px solid rgba(255,255,255,0.08) !important;
+            -webkit-backdrop-filter: blur(14px);
+            backdrop-filter: blur(14px);
+            transition: box-shadow .3s ease, transform .28s ease, background .3s ease;
+        }
+        #navbar.shadow-lg { box-shadow: 0 8px 30px rgba(0,0,0,.42) !important; }
+
+        #mobile-menu {
+            position: absolute;
+            top: 100%; left: 0; right: 0;
+            z-index: 9998;
+            background: rgba(11, 15, 25, .98);
+            border-top: 1px solid rgba(212,175,55,.16);
+            border-bottom: 1px solid rgba(255,255,255,.08);
+            box-shadow: 0 18px 40px rgba(0,0,0,.55);
+            -webkit-backdrop-filter: blur(14px);
+            backdrop-filter: blur(14px);
+            max-height: 0;
+            overflow: hidden;
+            transform: translateY(-8px);
+            opacity: 0;
+            pointer-events: none;
+            visibility: hidden;
+            transition: max-height .32s ease, transform .25s ease, opacity .25s ease, visibility 0s linear .32s;
+        }
+        #mobile-menu.open {
+            max-height: 460px;
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+            visibility: visible;
+            transition: max-height .32s ease, transform .25s ease, opacity .25s ease;
+        }
+        #mobile-menu a[href] {
+            background: rgba(255,255,255,.03);
+            border: 1px solid rgba(255,255,255,.06);
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
+        #mobile-menu a[href]:active,
+        #mobile-menu a[href]:hover {
+            background: rgba(212,175,55,.10);
+            border-color: rgba(212,175,55,.28);
+        }
+
+        #mobile-menu-btn {
+            width: 50px !important;
+            height: 50px !important;
+            min-width: 50px !important;
+            min-height: 50px !important;
+            padding: 0 !important;
+            margin-right: -2px !important;
+            border: 1.5px solid rgba(255,255,255,.92) !important;
+            border-radius: 999px !important;
+            background: #ffffff !important;
+            color: #0b0f19 !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            cursor: pointer !important;
+            touch-action: manipulation;
+            box-shadow: 0 10px 26px rgba(0,0,0,.38), inset 0 0 0 1px rgba(212,175,55,.12);
+            transition: transform .16s ease, border-color .22s ease, background-color .22s ease, box-shadow .22s ease;
+        }
+        #mobile-menu-btn * { pointer-events: none !important; }
+        #mobile-menu-btn .menu-btn-chevron {
+            width: 14px;
+            height: 14px;
+            display: inline-block;
+            border-right: 2.5px solid #0b0f19;
+            border-bottom: 2.5px solid #0b0f19;
+            transform: translateY(-2px) rotate(45deg);
+            transition: transform .22s ease, border-color .22s ease;
+        }
+        #mobile-menu-btn:active { transform: scale(.95); }
+        #mobile-menu-btn:focus-visible { outline: 3px solid rgba(212,175,55,.32); outline-offset: 3px; }
+        #mobile-menu-btn[aria-expanded="true"] { border-color: #d4af37 !important; }
+        #mobile-menu-btn[aria-expanded="true"] .menu-btn-chevron {
+            border-color: #d4af37;
+            transform: translateY(2px) rotate(225deg);
+        }
+        @media (min-width: 768px) {
+            #mobile-menu-btn { display: none !important; }
+            #mobile-menu { display: none !important; }
+        }
+
+        .gold-line { height: 1px; background: linear-gradient(90deg, transparent, rgba(212,175,55,.75), transparent); }
+        .glass-card {
+            background: linear-gradient(145deg, rgba(26,31,43,.92), rgba(11,15,25,.82));
+            border: 1px solid rgba(255,255,255,.08);
+            box-shadow: 0 24px 70px rgba(0,0,0,.35);
+        }
+        .gold-card {
+            background:
+                radial-gradient(circle at top right, rgba(212,175,55,.18), transparent 34%),
+                linear-gradient(145deg, rgba(26,31,43,.96), rgba(11,15,25,.96));
+            border: 1px solid rgba(212,175,55,.18);
+        }
+        .hero-grid {
+            background-image:
+                linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+            background-size: 52px 52px;
+            mask-image: linear-gradient(to bottom, black 0%, black 55%, transparent 100%);
+        }
+        .floating-badge {
+            animation: floatBadge 4.5s ease-in-out infinite;
+        }
+        @keyframes floatBadge {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .floating-badge { animation: none; }
+            * { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+        }
+
+        .form-field {
+            width: 100%;
+            background: rgba(11,15,25,.86);
+            border: 1px solid rgba(255,255,255,.10);
+            color: #ffffff;
+            border-radius: 4px;
+            padding: 12px 14px;
+            transition: border-color .2s ease, box-shadow .2s ease, background-color .2s ease;
+        }
+        .form-field:focus {
+            outline: none;
+            border-color: rgba(212,175,55,.85);
+            box-shadow: 0 0 0 3px rgba(212,175,55,.12);
+            background: rgba(11,15,25,1);
+        }
+        .form-field::placeholder { color: rgba(203,213,225,.42); }
+        select.form-field { appearance: none; background-image: linear-gradient(45deg, transparent 50%, #d4af37 50%), linear-gradient(135deg, #d4af37 50%, transparent 50%); background-position: calc(100% - 18px) 20px, calc(100% - 12px) 20px; background-size: 6px 6px, 6px 6px; background-repeat: no-repeat; padding-right: 38px; }
+
+
+        .application-section {
+            background:
+                radial-gradient(circle at 12% 10%, rgba(212,175,55,.10), transparent 28%),
+                radial-gradient(circle at 86% 0%, rgba(255,255,255,.055), transparent 26%),
+                linear-gradient(135deg, #161c28 0%, #0b0f19 100%);
+        }
+        .application-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: .75rem;
+            color: #d4af37;
+            font-size: .78rem;
+            line-height: 1;
+            font-weight: 800;
+            letter-spacing: .18em;
+            text-transform: uppercase;
+        }
+        .application-kicker::before {
+            content: '';
+            width: 38px;
+            height: 1px;
+            background: linear-gradient(90deg, #d4af37, transparent);
+        }
+        .intro-list {
+            display: grid;
+            gap: 12px;
+            margin-top: 28px;
+            max-width: 520px;
+        }
+        .intro-list-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(255,255,255,.08);
+        }
+        .intro-list-icon {
+            width: 34px;
+            height: 34px;
+            min-width: 34px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #d4af37;
+            background: rgba(212,175,55,.10);
+            border: 1px solid rgba(212,175,55,.24);
+        }
+        .form-shell {
+            background:
+                linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.018)),
+                rgba(7, 11, 19, .94);
+            border: 1px solid rgba(255,255,255,.08);
+            border-top: 1px solid rgba(212,175,55,.28);
+            border-radius: 18px;
+            box-shadow: 0 30px 90px rgba(0,0,0,.48), 0 0 0 1px rgba(212,175,55,.05) inset;
+        }
+        .form-shell::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            pointer-events: none;
+            background: radial-gradient(circle at 80% 0%, rgba(212,175,55,.13), transparent 30%);
+        }
+        .form-field {
+            border-radius: 10px;
+            background: rgba(8,12,20,.88);
+            border-color: rgba(148,163,184,.18);
+        }
+        .form-field:hover { border-color: rgba(212,175,55,.32); }
+        #apply-btn { border-radius: 10px; box-shadow: 0 18px 42px rgba(212,175,55,.16); }
+
+
+        .work-slider {
+            position: relative;
+            z-index: 10;
+            overflow: hidden;
+            width: 100%;
+            aspect-ratio: 16 / 10;
+            border-radius: 18px;
+            border: 1px solid rgba(212,175,55,.30);
+            background: rgba(7,11,19,.88);
+            box-shadow: 0 28px 80px rgba(0,0,0,.45), 0 0 0 1px rgba(255,255,255,.04) inset;
+        }
+        .work-slider::before {
+            content: '';
+            position: absolute;
+            inset: 14px;
+            border: 1px solid rgba(212,175,55,.35);
+            border-radius: 14px;
+            pointer-events: none;
+            z-index: 3;
+        }
+        .work-slider::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(180deg, rgba(11,15,25,.10), transparent 32%, rgba(11,15,25,.30)),
+                linear-gradient(90deg, rgba(11,15,25,.18), transparent 42%);
+            pointer-events: none;
+            z-index: 2;
+        }
+        .work-slider-track,
+        .work-slide {
+            width: 100%;
+            height: 100%;
+        }
+        .work-slider-track { position: relative; }
+        .work-slide {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transform: scale(1.04);
+            transition: opacity .65s ease, transform 1.05s ease;
+            pointer-events: none;
+        }
+        .work-slide.is-active {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto;
+            z-index: 1;
+        }
+        .work-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+        .work-slider-control {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 5;
+            width: 44px;
+            height: 44px;
+            min-width: 44px;
+            min-height: 44px;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,.18);
+            background: rgba(11,15,25,.72);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: background .2s ease, border-color .2s ease, transform .2s ease;
+        }
+        .work-slider-control:hover {
+            background: rgba(212,175,55,.92);
+            border-color: rgba(212,175,55,.95);
+            color: #0b0f19;
+        }
+        .work-slider-control:active { transform: translateY(-50%) scale(.94); }
+        .work-slider-prev { left: 26px; }
+        .work-slider-next { right: 26px; }
+        .work-slider-dots {
+            position: absolute;
+            left: 50%;
+            bottom: 24px;
+            transform: translateX(-50%);
+            z-index: 5;
+            display: flex;
+            gap: 9px;
+            padding: 8px 10px;
+            border-radius: 999px;
+            background: rgba(11,15,25,.62);
+            border: 1px solid rgba(255,255,255,.10);
+            backdrop-filter: blur(10px);
+        }
+        .work-slider-dot {
+            width: 10px;
+            height: 10px;
+            min-width: 10px;
+            min-height: 10px;
+            padding: 0;
+            border-radius: 999px;
+            border: 0;
+            background: rgba(255,255,255,.35);
+            cursor: pointer;
+            transition: width .25s ease, background .25s ease;
+        }
+        .work-slider-dot.is-active {
+            width: 28px;
+            background: #d4af37;
+        }
+        @media (max-width: 640px) {
+            .work-slider {
+                aspect-ratio: 4 / 3;
+                border-radius: 14px;
+            }
+            .work-slider::before { inset: 9px; border-radius: 10px; }
+            .work-slider-control {
+                width: 40px;
+                height: 40px;
+                min-width: 40px;
+                min-height: 40px;
+            }
+            .work-slider-prev { left: 14px; }
+            .work-slider-next { right: 14px; }
+            .work-slider-dots { bottom: 14px; }
+        }
+
+        #apply-btn.loading { opacity: .72; cursor: not-allowed; pointer-events: none; }
+        #apply-btn .btn-spinner {
+            display: none;
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(11,15,25,.3);
+            border-top-color: #0b0f19;
+            border-radius: 50%;
+            animation: spin .75s linear infinite;
+        }
+        #apply-btn.loading .btn-spinner { display: block; }
+        #apply-btn.loading .btn-text,
+        #apply-btn.loading .btn-icon { display: none; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="bg-ivo-dark text-ivo-light font-sans antialiased selection:bg-ivo-gold selection:text-ivo-dark">
+
+    <nav id="navbar" class="py-3">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-12">
+                <a href="index.html" class="flex-shrink-0" aria-label="Zur Startseite">
+                    <img src="IvoBau.png" alt="IvoBau Logo" class="h-10 sm:h-12 w-auto object-contain" style="filter:brightness(0) invert(1);" loading="eager" width="120" height="48">
+                </a>
+                <div class="hidden md:flex items-center gap-5">
+                    <a href="index.html" class="text-gray-300 hover:text-ivo-gold transition-colors text-sm uppercase tracking-wide">Startseite</a>
+                    <a href="#bewerbung" class="bg-ivo-gold hover:bg-ivo-gold-hover text-ivo-dark px-5 py-2 rounded-sm font-semibold transition-all duration-300 hover:scale-105 text-sm whitespace-nowrap shadow-lg shadow-ivo-gold/10">Jetzt bewerben</a>
+                </div>
+                <button id="mobile-menu-btn" class="md:hidden" type="button" aria-label="Menü öffnen" aria-expanded="false">
+                    <span class="menu-btn-chevron" aria-hidden="true"></span>
+                </button>
+            </div>
+        </div>
+        <div id="mobile-menu" role="dialog" aria-label="Navigation">
+            <div class="px-4 pt-4 pb-6 space-y-2">
+                <a href="index.html" class="flex items-center justify-between gap-3 px-4 py-3.5 text-gray-200 hover:text-ivo-gold rounded-sm transition-colors text-base font-medium">
+                    <span>Startseite</span>
+                    <i data-lucide="arrow-right" class="w-4 h-4 text-ivo-gold"></i>
+                </a>
+                <a href="#bewerbung" class="flex items-center justify-center px-4 py-3.5 bg-ivo-gold text-ivo-dark rounded-sm font-bold text-base shadow-lg shadow-ivo-gold/10">Jetzt bewerben</a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <section id="hero" class="relative min-h-screen flex items-center pt-24 pb-16 overflow-hidden">
+            <div class="absolute inset-0 z-0">
+                <img src="https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?ixlib=rb-4.0.3&auto=format&fit=crop&w=1400&q=72" alt="Handwerker auf Baustelle" class="w-full h-full object-cover opacity-24" loading="eager" decoding="async" fetchpriority="high">
+                <div class="absolute inset-0 bg-gradient-to-b from-ivo-dark/85 via-ivo-dark/72 to-ivo-dark"></div>
+                <div class="absolute inset-0 hero-grid opacity-70"></div>
+                <div class="absolute -right-16 top-28 w-80 h-80 bg-ivo-gold/15 blur-[120px]"></div>
+                <div class="absolute -left-20 bottom-10 w-80 h-80 bg-white/5 blur-[120px]"></div>
+            </div>
+
+            <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 w-full">
+                <div class="grid lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+                    <div class="lg:col-span-7 text-center lg:text-left">
+                        <span class="inline-flex items-center gap-2 text-ivo-gold font-semibold tracking-[0.18em] uppercase mb-5 text-xs sm:text-sm">
+                            <span class="w-8 h-px bg-ivo-gold"></span> Karriere bei IvoBau
+                        </span>
+                        <h1 class="font-serif text-[2.45rem] leading-tight sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6">
+                            Bewirb dich als<br>
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-ivo-gold to-yellow-200">Mitarbeiter</span>
+                        </h1>
+                        <p class="max-w-2xl mx-auto lg:mx-0 text-base sm:text-xl text-gray-300 mb-8 font-light leading-relaxed">
+                            Du arbeitest sauber, zuverlässig und hast Lust auf hochwertige Projekte im Innenausbau, Trockenbau, Dämmung oder Renovierung? Dann passt du vielleicht genau in unser Team.
+                        </p>
+                        <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-stretch sm:items-center">
+                            <a href="#bewerbung" class="px-8 py-4 bg-ivo-gold text-ivo-dark font-bold rounded-sm hover:bg-ivo-gold-hover transition-all duration-300 hover:-translate-y-1 flex items-center justify-center gap-2">
+                                Bewerbung starten <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                            </a>
+                            <a href="tel:015735255753" class="px-8 py-4 bg-transparent border border-ivo-gold text-ivo-gold font-bold rounded-sm hover:bg-ivo-gold/10 transition-all duration-300 flex items-center justify-center gap-2">
+                                <i data-lucide="phone" class="w-5 h-5"></i> Kurz anrufen
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-5">
+                        <div class="glass-card rounded-lg p-5 sm:p-6 relative overflow-hidden floating-badge">
+                            <div class="absolute right-0 top-0 w-32 h-32 bg-ivo-gold/10 blur-3xl"></div>
+                            <div class="relative">
+                                <div class="flex items-center gap-3 mb-6">
+                                    <div class="w-12 h-12 rounded-full bg-ivo-gold/15 border border-ivo-gold/30 flex items-center justify-center">
+                                        <i data-lucide="hard-hat" class="w-6 h-6 text-ivo-gold"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-white font-bold text-lg">Mitarbeiter gesucht</p>
+                                        <p class="text-gray-400 text-sm">Handwerk · Ausbau · Renovierung</p>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-3 gap-3 mb-6">
+                                    <div class="bg-white/5 border border-white/8 rounded-sm p-3 text-center">
+                                        <p class="text-ivo-gold font-bold text-lg">Fair</p>
+                                        <p class="text-gray-400 text-xs">Umgang</p>
+                                    </div>
+                                    <div class="bg-white/5 border border-white/8 rounded-sm p-3 text-center">
+                                        <p class="text-ivo-gold font-bold text-lg">Sauber</p>
+                                        <p class="text-gray-400 text-xs">Arbeiten</p>
+                                    </div>
+                                    <div class="bg-white/5 border border-white/8 rounded-sm p-3 text-center">
+                                        <p class="text-ivo-gold font-bold text-lg">Team</p>
+                                        <p class="text-gray-400 text-xs">Spirit</p>
+                                    </div>
+                                </div>
+                                <div class="gold-line mb-5"></div>
+                                <ul class="space-y-3 text-sm text-gray-300">
+                                    <li class="flex gap-3"><i data-lucide="check-circle" class="w-5 h-5 text-ivo-gold flex-shrink-0"></i> Ordentliche Baustellen und klare Absprachen</li>
+                                    <li class="flex gap-3"><i data-lucide="check-circle" class="w-5 h-5 text-ivo-gold flex-shrink-0"></i> Hochwertige Projekte statt Pfusch und Chaos</li>
+                                    <li class="flex gap-3"><i data-lucide="check-circle" class="w-5 h-5 text-ivo-gold flex-shrink-0"></i> Kurze Bewerbung direkt über das Formular</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-16 sm:py-24 bg-ivo-anthracite border-y border-white/5">
+            <div class="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
+                <div class="text-center mb-12 sm:mb-16">
+                    <h2 class="text-ivo-gold text-xs font-bold tracking-widest uppercase mb-2">Was dich erwartet</h2>
+                    <h3 class="font-serif text-2xl sm:text-4xl text-white">Ein starkes Team für saubere Arbeit</h3>
+                </div>
+                <div class="grid md:grid-cols-3 gap-5 sm:gap-8">
+                    <div class="gold-card rounded-sm p-6 sm:p-8">
+                        <i data-lucide="ruler" class="text-ivo-gold w-10 h-10 mb-5"></i>
+                        <h4 class="text-white font-bold text-lg sm:text-xl mb-3">Präzise Umsetzung</h4>
+                        <p class="text-gray-400 text-sm sm:text-base leading-relaxed">Bei uns zählt Genauigkeit: saubere Kanten, gerade Flächen, ordentliche Übergaben und eine professionelle Ausführung.</p>
+                    </div>
+                    <div class="gold-card rounded-sm p-6 sm:p-8">
+                        <i data-lucide="messages-square" class="text-ivo-gold w-10 h-10 mb-5"></i>
+                        <h4 class="text-white font-bold text-lg sm:text-xl mb-3">Klare Kommunikation</h4>
+                        <p class="text-gray-400 text-sm sm:text-base leading-relaxed">Du bekommst klare Aufgaben, ehrliche Absprachen und eine Arbeitsweise, bei der man sich aufeinander verlassen kann.</p>
+                    </div>
+                    <div class="gold-card rounded-sm p-6 sm:p-8">
+                        <i data-lucide="sparkles" class="text-ivo-gold w-10 h-10 mb-5"></i>
+                        <h4 class="text-white font-bold text-lg sm:text-xl mb-3">Schöne Ergebnisse</h4>
+                        <p class="text-gray-400 text-sm sm:text-base leading-relaxed">Wir möchten Projekte abgeben, auf die man stolz sein kann – hochwertig, sauber und mit Liebe zum Detail.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-16 sm:py-24 bg-ivo-dark">
+            <div class="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
+                <div class="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+                    <div>
+                        <h2 class="text-ivo-gold text-xs font-bold tracking-widest uppercase mb-2">Wen wir suchen</h2>
+                        <h3 class="font-serif text-2xl sm:text-4xl text-white mb-5 leading-snug">Handwerker mit Anspruch an Qualität</h3>
+                        <p class="text-gray-400 text-sm sm:text-base leading-relaxed mb-6">
+                            Perfekt ist jemand, der selbstständig denken kann, zuverlässig erscheint und sauber arbeitet. Erfahrung im Trockenbau, Innenausbau, Dämmung, Malerarbeiten, Bodenaufbau oder Sanierung ist von Vorteil.
+                        </p>
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            <div class="flex gap-3 p-4 bg-ivo-anthracite border border-white/5 rounded-sm">
+                                <i data-lucide="check" class="w-5 h-5 text-ivo-gold flex-shrink-0 mt-0.5"></i>
+                                <span class="text-gray-300 text-sm">Zuverlässigkeit und pünktliches Erscheinen</span>
+                            </div>
+                            <div class="flex gap-3 p-4 bg-ivo-anthracite border border-white/5 rounded-sm">
+                                <i data-lucide="check" class="w-5 h-5 text-ivo-gold flex-shrink-0 mt-0.5"></i>
+                                <span class="text-gray-300 text-sm">Saubere und präzise Arbeitsweise</span>
+                            </div>
+                            <div class="flex gap-3 p-4 bg-ivo-anthracite border border-white/5 rounded-sm">
+                                <i data-lucide="check" class="w-5 h-5 text-ivo-gold flex-shrink-0 mt-0.5"></i>
+                                <span class="text-gray-300 text-sm">Teamfähigkeit und ordentliches Auftreten</span>
+                            </div>
+                            <div class="flex gap-3 p-4 bg-ivo-anthracite border border-white/5 rounded-sm">
+                                <i data-lucide="check" class="w-5 h-5 text-ivo-gold flex-shrink-0 mt-0.5"></i>
+                                <span class="text-gray-300 text-sm">Führerschein ist von Vorteil</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="relative">
+                        <div id="work-slider" class="work-slider" aria-label="Projektbilder aus dem Innenausbau">
+                            <div class="work-slider-track">
+                                <figure class="work-slide is-active">
+                                    <img src="pictures/b2.jpg" alt="Modern ausgeführte Deckenarbeiten mit LED-Lichtlinien" loading="lazy" decoding="async">
+                                </figure>
+                                <figure class="work-slide">
+                                    <img src="pictures/b3.jpg" alt="Sauber verputzte Wandfläche im Innenbereich" loading="lazy" decoding="async">
+                                </figure>
+                                <figure class="work-slide">
+                                    <img src="pictures/b1.jpg" alt="Dachausbau mit Dämmung und Unterkonstruktion" loading="lazy" decoding="async">
+                                </figure>
+                            </div>
+                            <button class="work-slider-control work-slider-prev" type="button" aria-label="Vorheriges Bild" data-slide-dir="-1">&#10094;</button>
+                            <button class="work-slider-control work-slider-next" type="button" aria-label="Nächstes Bild" data-slide-dir="1">&#10095;</button>
+                            <div class="work-slider-dots" aria-label="Slider Navigation">
+                                <button class="work-slider-dot is-active" type="button" aria-label="Bild 1 anzeigen" data-work-dot="0"></button>
+                                <button class="work-slider-dot" type="button" aria-label="Bild 2 anzeigen" data-work-dot="1"></button>
+                                <button class="work-slider-dot" type="button" aria-label="Bild 3 anzeigen" data-work-dot="2"></button>
+                            </div>
+                        </div>
+                        <div class="hidden sm:block absolute -bottom-5 -right-5 w-full h-full border-2 border-ivo-gold rounded-sm z-0"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="bewerbung" class="application-section py-16 sm:py-24 border-y border-white/5 relative overflow-hidden">
+            <div class="absolute right-0 top-0 w-1/2 sm:w-1/3 h-full bg-ivo-gold/5 blur-[120px] pointer-events-none"></div>
+            <div class="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 relative z-10">
+                <div class="grid lg:grid-cols-12 gap-10 lg:gap-14">
+                    <div class="lg:col-span-5 flex flex-col justify-center">
+                        <span class="application-kicker mb-5">Kurzbewerbung</span>
+                        <h3 class="font-serif text-3xl sm:text-5xl text-white mb-6 leading-tight">Schick uns deine Bewerbung in wenigen Minuten</h3>
+                        <p class="text-gray-300 text-base sm:text-lg leading-relaxed max-w-xl">
+                            Fülle kurz das Formular aus. Wir melden uns zeitnah bei dir und besprechen alles Weitere persönlich.
+                        </p>
+                        <div class="intro-list">
+                            <div class="intro-list-item">
+                                <span class="intro-list-icon"><i data-lucide="timer" class="w-4 h-4"></i></span>
+                                <div>
+                                    <p class="text-white font-semibold">Schnell ausgefüllt</p>
+                                    <p class="text-gray-400 text-sm mt-1">Nur die wichtigsten Angaben – ohne unnötige Umwege.</p>
+                                </div>
+                            </div>
+                            <div class="intro-list-item">
+                                <span class="intro-list-icon"><i data-lucide="handshake" class="w-4 h-4"></i></span>
+                                <div>
+                                    <p class="text-white font-semibold">Persönliche Rückmeldung</p>
+                                    <p class="text-gray-400 text-sm mt-1">Wir prüfen deine Anfrage und melden uns direkt bei dir.</p>
+                                </div>
+                            </div>
+                            <div class="intro-list-item">
+                                <span class="intro-list-icon"><i data-lucide="shield-check" class="w-4 h-4"></i></span>
+                                <div>
+                                    <p class="text-white font-semibold">Diskrete Bearbeitung</p>
+                                    <p class="text-gray-400 text-sm mt-1">Deine Daten werden nur für deine Bewerbung verwendet.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-7">
+                        <div class="form-shell relative overflow-hidden p-5 sm:p-8">
+                            <form id="career-form" class="relative z-10 space-y-5" novalidate>
+                                <div class="mb-6 pb-5 border-b border-white/10">
+                                    <p class="text-ivo-gold text-xs font-bold tracking-widest uppercase mb-2">Formular</p>
+                                    <h4 class="text-white font-serif text-2xl sm:text-3xl leading-tight">Deine Kontaktdaten</h4>
+                                </div>
+                                <input type="hidden" name="page_source" id="page_source" value="Bewerbung als Mitarbeiter - IvoBau">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                                    <div>
+                                        <label for="full_name" class="block text-xs sm:text-sm font-medium text-gray-400 mb-1.5">Vollständiger Name *</label>
+                                        <input type="text" id="full_name" name="full_name" required autocomplete="name" class="form-field" placeholder="Max Mustermann">
+                                    </div>
+                                    <div>
+                                        <label for="phone" class="block text-xs sm:text-sm font-medium text-gray-400 mb-1.5">Telefonnummer *</label>
+                                        <input type="tel" id="phone" name="phone" required autocomplete="tel" class="form-field" placeholder="0157 ...">
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                                    <div>
+                                        <label for="email" class="block text-xs sm:text-sm font-medium text-gray-400 mb-1.5">E-Mail Adresse *</label>
+                                        <input type="email" id="email" name="email" required autocomplete="email" class="form-field" placeholder="name@email.de">
+                                    </div>
+                                    <div>
+                                        <label for="city" class="block text-xs sm:text-sm font-medium text-gray-400 mb-1.5">Wohnort / Umgebung</label>
+                                        <input type="text" id="city" name="city" autocomplete="address-level2" class="form-field" placeholder="z.B. Frankfurt am Main">
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                                    <div>
+                                        <label for="position" class="block text-xs sm:text-sm font-medium text-gray-400 mb-1.5">Bereich *</label>
+                                        <select id="position" name="position" required class="form-field">
+                                            <option value="">Bitte wählen...</option>
+                                            <option value="Trockenbau">Trockenbau</option>
+                                            <option value="Innenausbau">Innenausbau</option>
+                                            <option value="Wärmedämmung">Wärmedämmung</option>
+                                            <option value="Maler-/Spachtelarbeiten">Maler-/Spachtelarbeiten</option>
+                                            <option value="Boden / Trockenestrich">Boden / Trockenestrich</option>
+                                            <option value="Helfer / Quereinsteiger">Helfer / Quereinsteiger</option>
+                                            <option value="Sonstiges">Sonstiges</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="experience_years" class="block text-xs sm:text-sm font-medium text-gray-400 mb-1.5">Erfahrung</label>
+                                        <select id="experience_years" name="experience_years" class="form-field">
+                                            <option value="">Bitte wählen...</option>
+                                            <option value="Keine Erfahrung / Quereinsteiger">Keine Erfahrung / Quereinsteiger</option>
+                                            <option value="Unter 1 Jahr">Unter 1 Jahr</option>
+                                            <option value="1-3 Jahre">1-3 Jahre</option>
+                                            <option value="3-5 Jahre">3-5 Jahre</option>
+                                            <option value="Über 5 Jahre">Über 5 Jahre</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                                    <div>
+                                        <label for="employment_type" class="block text-xs sm:text-sm font-medium text-gray-400 mb-1.5">Beschäftigungsart</label>
+                                        <select id="employment_type" name="employment_type" class="form-field">
+                                            <option value="">Bitte wählen...</option>
+                                            <option value="Vollzeit">Vollzeit</option>
+                                            <option value="Teilzeit">Teilzeit</option>
+                                            <option value="Minijob">Minijob</option>
+                                            <option value="Subunternehmer">Subunternehmer</option>
+                                            <option value="Praktikum / Ausbildung">Praktikum / Ausbildung</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="availability" class="block text-xs sm:text-sm font-medium text-gray-400 mb-1.5">Verfügbarkeit</label>
+                                        <select id="availability" name="availability" class="form-field">
+                                            <option value="">Bitte wählen...</option>
+                                            <option value="Sofort">Sofort</option>
+                                            <option value="In 2 Wochen">In 2 Wochen</option>
+                                            <option value="In 1 Monat">In 1 Monat</option>
+                                            <option value="Nach Vereinbarung">Nach Vereinbarung</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                                    <div>
+                                        <label for="driver_license" class="block text-xs sm:text-sm font-medium text-gray-400 mb-1.5">Führerschein</label>
+                                        <select id="driver_license" name="driver_license" class="form-field">
+                                            <option value="">Bitte wählen...</option>
+                                            <option value="Ja, Klasse B">Ja, Klasse B</option>
+                                            <option value="Ja, andere Klasse">Ja, andere Klasse</option>
+                                            <option value="Nein">Nein</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="own_tools" class="block text-xs sm:text-sm font-medium text-gray-400 mb-1.5">Eigenes Werkzeug / Auto?</label>
+                                        <select id="own_tools" name="own_tools" class="form-field">
+                                            <option value="">Bitte wählen...</option>
+                                            <option value="Eigenes Werkzeug vorhanden">Eigenes Werkzeug vorhanden</option>
+                                            <option value="Eigenes Auto vorhanden">Eigenes Auto vorhanden</option>
+                                            <option value="Werkzeug und Auto vorhanden">Werkzeug und Auto vorhanden</option>
+                                            <option value="Nicht vorhanden">Nicht vorhanden</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label for="message" class="block text-xs sm:text-sm font-medium text-gray-400 mb-1.5">Kurze Nachricht / Erfahrung *</label>
+                                    <textarea id="message" name="message" rows="5" required class="form-field resize-none" placeholder="Erzähl kurz, was du kannst, wo du gearbeitet hast und ab wann du starten könntest."></textarea>
+                                </div>
+
+                                <div class="flex items-start gap-3">
+                                    <div class="flex items-center pt-0.5">
+                                        <input id="gdpr" name="gdpr" type="checkbox" required class="w-5 h-5 bg-ivo-dark border border-white/10 rounded text-ivo-gold focus:ring-ivo-gold focus:ring-offset-ivo-dark cursor-pointer flex-shrink-0">
+                                    </div>
+                                    <label for="gdpr" class="text-xs sm:text-sm font-medium text-gray-400 leading-relaxed cursor-pointer">
+                                        Ich stimme der Verarbeitung meiner Daten gemäß der <a href="datenschutz.html" class="text-ivo-gold hover:underline" target="_blank">Datenschutzerklärung</a> zu.
+                                    </label>
+                                </div>
+
+                                <button type="submit" id="apply-btn" class="w-full bg-ivo-gold text-ivo-dark font-bold py-4 rounded-sm hover:bg-ivo-gold-hover transition-colors flex justify-center items-center gap-2 text-sm sm:text-base">
+                                    <span class="btn-text">Bewerbung senden</span>
+                                    <i data-lucide="send" class="w-4 h-4 btn-icon"></i>
+                                    <span class="btn-spinner" aria-hidden="true"></span>
+                                </button>
+                                <div id="form-status" class="hidden p-4 rounded-sm text-sm font-medium text-center"></div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-black pt-12 sm:pt-16 pb-8 border-t border-white/10">
+        <div class="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 sm:gap-12 mb-10">
+                <div class="col-span-2 md:col-span-1">
+                    <div class="mb-5">
+                        <img src="IvoBau.png" alt="IvoBau Logo" class="h-12 sm:h-14 w-auto object-contain" style="filter:brightness(0) invert(1);" loading="lazy">
+                    </div>
+                    <p class="text-gray-400 text-xs sm:text-sm leading-relaxed">Ihr vertrauensvoller Partner für Premium-Innenausbau, Wärmedämmung und Renovierungen.</p>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4 sm:mb-6 text-sm sm:text-base">Kontakt</h4>
+                    <ul class="space-y-2 sm:space-y-3 text-xs sm:text-sm text-gray-400">
+                        <li><a href="tel:015735255753" class="hover:text-ivo-gold transition-colors">Tel: 0157 35255753</a></li>
+                        <li><a href="mailto:bau.tunjic@gmail.com" class="hover:text-ivo-gold transition-colors break-all">bau.tunjic@gmail.com</a></li>
+                        <li>Deutschland</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4 sm:mb-6 text-sm sm:text-base">Seiten</h4>
+                    <ul class="space-y-2 sm:space-y-3 text-xs sm:text-sm text-gray-400">
+                        <li><a href="index.html" class="hover:text-ivo-gold transition-colors">Startseite</a></li>
+                        <li><a href="#bewerbung" class="hover:text-ivo-gold transition-colors">Bewerbung</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4 sm:mb-6 text-sm sm:text-base">Rechtliches</h4>
+                    <ul class="space-y-2 sm:space-y-3 text-xs sm:text-sm text-gray-400">
+                        <li><a href="impressum.html" class="hover:text-ivo-gold transition-colors">Impressum</a></li>
+                        <li><a href="datenschutz.html" class="hover:text-ivo-gold transition-colors">Datenschutz</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-white/10 pt-6 flex flex-col md:flex-row justify-between items-center gap-3">
+                <p class="text-gray-500 text-xs sm:text-sm">© <span id="year"></span> IvoBau. Alle Rechte vorbehalten.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+    // ════════════════════════════════════════════════════════════════
+    // EmailJS für Bewerbungen
+    // Später nur diese Template-ID in deine echte EmailJS-Vorlage ändern.
+    // Alle Template-Parameter stehen unten in templateParams.
+    // ════════════════════════════════════════════════════════════════
+    var EMAILJS_PUBLIC_KEY = 'POu8H-e_AK6DIEPBK';
+    var EMAILJS_SERVICE_ID = 'service_canpm6o';
+    var EMAILJS_CAREER_TEMPLATE_ID = 'template_mitarbeiterbewerbung';
+
+    document.addEventListener('DOMContentLoaded', function () {
+        if (typeof emailjs !== 'undefined') {
+            emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+        }
+
+        var yearEl = document.getElementById('year');
+        if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+        var navbar = document.getElementById('navbar');
+        function updateNavbar() {
+            if (!navbar) return;
+            navbar.classList.toggle('shadow-lg', (window.scrollY || 0) > 40);
+        }
+        window.addEventListener('scroll', updateNavbar, { passive: true });
+        updateNavbar();
+
+        var menuBtn = document.getElementById('mobile-menu-btn');
+        var mobileMenu = document.getElementById('mobile-menu');
+        function closeMenu() {
+            if (!menuBtn || !mobileMenu) return;
+            mobileMenu.classList.remove('open');
+            menuBtn.setAttribute('aria-expanded', 'false');
+            menuBtn.setAttribute('aria-label', 'Menü öffnen');
+        }
+        if (menuBtn && mobileMenu) {
+            menuBtn.addEventListener('click', function () {
+                var isOpen = mobileMenu.classList.toggle('open');
+                menuBtn.setAttribute('aria-expanded', String(isOpen));
+                menuBtn.setAttribute('aria-label', isOpen ? 'Menü schließen' : 'Menü öffnen');
+            });
+            mobileMenu.querySelectorAll('a').forEach(function (link) {
+                link.addEventListener('click', closeMenu);
+            });
+            document.addEventListener('click', function (e) {
+                if (!mobileMenu.contains(e.target) && !menuBtn.contains(e.target)) closeMenu();
+            });
+        }
+
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+
+
+        var workSlider = document.getElementById('work-slider');
+        if (workSlider) {
+            var slides = Array.prototype.slice.call(workSlider.querySelectorAll('.work-slide'));
+            var dots = Array.prototype.slice.call(workSlider.querySelectorAll('.work-slider-dot'));
+            var controls = Array.prototype.slice.call(workSlider.querySelectorAll('[data-slide-dir]'));
+            var activeSlide = 0;
+            var slideTimer = null;
+            var touchStartX = 0;
+
+            function showWorkSlide(index) {
+                if (!slides.length) return;
+                activeSlide = (index + slides.length) % slides.length;
+                slides.forEach(function (slide, i) {
+                    slide.classList.toggle('is-active', i === activeSlide);
+                });
+                dots.forEach(function (dot, i) {
+                    dot.classList.toggle('is-active', i === activeSlide);
+                    dot.setAttribute('aria-current', i === activeSlide ? 'true' : 'false');
+                });
+            }
+
+            function nextWorkSlide() {
+                showWorkSlide(activeSlide + 1);
+            }
+
+            function startWorkSlider() {
+                stopWorkSlider();
+                slideTimer = window.setInterval(nextWorkSlide, 4200);
+            }
+
+            function stopWorkSlider() {
+                if (slideTimer) window.clearInterval(slideTimer);
+            }
+
+            controls.forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    var dir = Number(btn.getAttribute('data-slide-dir')) || 1;
+                    showWorkSlide(activeSlide + dir);
+                    startWorkSlider();
+                });
+            });
+
+            dots.forEach(function (dot) {
+                dot.addEventListener('click', function () {
+                    showWorkSlide(Number(dot.getAttribute('data-work-dot')) || 0);
+                    startWorkSlider();
+                });
+            });
+
+            workSlider.addEventListener('mouseenter', stopWorkSlider);
+            workSlider.addEventListener('mouseleave', startWorkSlider);
+            workSlider.addEventListener('touchstart', function (e) {
+                touchStartX = e.changedTouches[0].clientX;
+                stopWorkSlider();
+            }, { passive: true });
+            workSlider.addEventListener('touchend', function (e) {
+                var diff = touchStartX - e.changedTouches[0].clientX;
+                if (Math.abs(diff) > 45) showWorkSlide(activeSlide + (diff > 0 ? 1 : -1));
+                startWorkSlider();
+            }, { passive: true });
+
+            showWorkSlide(0);
+            startWorkSlider();
+        }
+
+        var form = document.getElementById('career-form');
+        var status = document.getElementById('form-status');
+        var applyBtn = document.getElementById('apply-btn');
+
+        function showStatus(type, message) {
+            if (!status) return;
+            status.classList.remove('hidden');
+            status.textContent = message;
+            if (type === 'success') {
+                status.className = 'p-4 rounded-sm text-sm font-medium text-center bg-green-500/15 text-green-300 border border-green-500/25';
+            } else {
+                status.className = 'p-4 rounded-sm text-sm font-medium text-center bg-red-500/15 text-red-300 border border-red-500/25';
+            }
+        }
+
+        function getValue(id) {
+            var el = document.getElementById(id);
+            return el ? el.value.trim() : '';
+        }
+
+        if (form && status && applyBtn) {
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                var fullName = getValue('full_name');
+                var phone = getValue('phone');
+                var email = getValue('email');
+                var position = getValue('position');
+                var message = getValue('message');
+                var gdpr = document.getElementById('gdpr');
+
+                if (!fullName || !phone || !email || !position || !message || !gdpr || !gdpr.checked) {
+                    showStatus('error', 'Bitte fülle alle Pflichtfelder aus und akzeptiere die Datenschutzerklärung.');
+                    return;
+                }
+
+                var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailPattern.test(email)) {
+                    showStatus('error', 'Bitte gib eine gültige E-Mail-Adresse ein.');
+                    return;
+                }
+
+                applyBtn.classList.add('loading');
+                applyBtn.disabled = true;
+                status.classList.add('hidden');
+
+                var templateParams = {
+                    // Empfänger / Meta
+                    to_email: 'bau.tunjic@gmail.com',
+                    page_source: getValue('page_source'),
+                    submitted_at: new Date().toLocaleString('de-DE'),
+                    reply_to: email,
+
+                    // Bewerberdaten – diese Namen im EmailJS-Template verwenden
+                    full_name: fullName,
+                    phone: phone,
+                    email: email,
+                    city: getValue('city'),
+                    position: position,
+                    experience_years: getValue('experience_years'),
+                    employment_type: getValue('employment_type'),
+                    availability: getValue('availability'),
+                    driver_license: getValue('driver_license'),
+                    own_tools: getValue('own_tools'),
+                    message: message
+                };
+
+                if (typeof emailjs === 'undefined') {
+                    applyBtn.classList.remove('loading');
+                    applyBtn.disabled = false;
+                    showStatus('error', 'EmailJS konnte nicht geladen werden. Bitte prüfe die Internetverbindung oder sende die Bewerbung direkt per E-Mail.');
+                    return;
+                }
+
+                emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_CAREER_TEMPLATE_ID, templateParams)
+                    .then(function () {
+                        showStatus('success', 'Vielen Dank! Deine Bewerbung wurde erfolgreich gesendet. Wir melden uns zeitnah.');
+                        form.reset();
+                    })
+                    .catch(function (error) {
+                        console.error('EmailJS Bewerbungsfehler:', error);
+                        showStatus('error', 'Die Bewerbung konnte gerade nicht gesendet werden. Bitte später erneut versuchen oder direkt an bau.tunjic@gmail.com schreiben.');
+                    })
+                    .finally(function () {
+                        applyBtn.classList.remove('loading');
+                        applyBtn.disabled = false;
+                    });
+            });
+        }
+    });
+    </script>
+</body>
+</html>
