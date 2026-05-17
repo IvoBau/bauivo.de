@@ -362,11 +362,69 @@
             border-color: rgba(212,175,55,0.28);
         }
         #mobile-menu-btn {
-            transition: color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+            width: 92px !important;
+            height: 46px !important;
+            min-width: 92px !important;
+            min-height: 46px !important;
+            padding: 0 14px !important;
+            margin-right: -2px !important;
+            border: 1.5px solid rgba(212,175,55,0.70) !important;
+            border-radius: 999px !important;
+            background: linear-gradient(135deg, rgba(212,175,55,0.18), rgba(255,255,255,0.035)) !important;
+            color: #f8fafc !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 9px !important;
+            cursor: pointer !important;
+            touch-action: manipulation;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05), 0 10px 24px rgba(0,0,0,0.32);
+            transition: transform 0.16s ease, border-color 0.22s ease, background-color 0.22s ease, box-shadow 0.22s ease;
+        }
+        #mobile-menu-btn * {
+            pointer-events: none !important;
+        }
+        #mobile-menu-btn .menu-btn-label {
+            font-size: 11px;
+            line-height: 1;
+            font-weight: 800;
+            letter-spacing: 0.16em;
+            color: #f8fafc;
+            text-transform: uppercase;
+        }
+        #mobile-menu-btn .menu-btn-chevron {
+            width: 10px;
+            height: 10px;
+            display: inline-block;
+            border-right: 2px solid #d4af37;
+            border-bottom: 2px solid #d4af37;
+            transform: translateY(-2px) rotate(45deg);
+            transition: transform 0.22s ease, border-color 0.22s ease;
+        }
+        #mobile-menu-btn:hover,
+        #mobile-menu-btn:focus-visible {
+            border-color: #d4af37 !important;
+            background: linear-gradient(135deg, rgba(212,175,55,0.28), rgba(255,255,255,0.055)) !important;
+            box-shadow: inset 0 0 0 1px rgba(212,175,55,0.10), 0 12px 28px rgba(0,0,0,0.40);
+            outline: none;
+        }
+        #mobile-menu-btn:active {
+            transform: scale(0.95);
         }
         #mobile-menu-btn[aria-expanded="true"] {
-            color: #d4af37;
-            background: rgba(212,175,55,0.10);
+            border-color: #d4af37 !important;
+            background: #d4af37 !important;
+            color: #0b0f19 !important;
+        }
+        #mobile-menu-btn[aria-expanded="true"] .menu-btn-label {
+            color: #0b0f19;
+        }
+        #mobile-menu-btn[aria-expanded="true"] .menu-btn-chevron {
+            border-color: #0b0f19;
+            transform: translateY(2px) rotate(225deg);
         }
         @media (min-width: 768px) {
             #mobile-menu { display: none !important; }
@@ -389,8 +447,9 @@
                     <a href="#process"  class="text-gray-300 hover:text-ivo-gold transition-colors text-sm uppercase tracking-wide">Ablauf</a>
                     <a href="#contact"  class="bg-ivo-gold hover:bg-ivo-gold-hover text-ivo-dark px-5 py-2 rounded-sm font-semibold transition-all duration-300 hover:scale-105 text-sm whitespace-nowrap">Angebot anfragen</a>
                 </div>
-                <button id="mobile-menu-btn" class="md:hidden text-white hover:text-ivo-gold p-2 -mr-2 rounded-md" aria-label="Menü öffnen" aria-expanded="false">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                <button id="mobile-menu-btn" class="md:hidden" type="button" aria-label="Menü öffnen" aria-expanded="false">
+                    <span class="menu-btn-label">Menü</span>
+                    <span class="menu-btn-chevron" aria-hidden="true"></span>
                 </button>
             </div>
         </div>
@@ -1008,20 +1067,17 @@
         var menuBtn    = document.getElementById('mobile-menu-btn');
         var mobileMenu = document.getElementById('mobile-menu');
 
-        var iconBars = '<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>';
-        var iconX    = '<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
-
         function closeMenu() {
             mobileMenu.classList.remove('open');
             menuBtn.setAttribute('aria-expanded', 'false');
-            menuBtn.innerHTML = iconBars;
+            menuBtn.setAttribute('aria-label', 'Menü öffnen');
         }
 
         if (menuBtn && mobileMenu) {
             menuBtn.addEventListener('click', function () {
                 var isOpen = mobileMenu.classList.toggle('open');
                 menuBtn.setAttribute('aria-expanded', String(isOpen));
-                menuBtn.innerHTML = isOpen ? iconX : iconBars;
+                menuBtn.setAttribute('aria-label', isOpen ? 'Menü schließen' : 'Menü öffnen');
                 var navEl = document.getElementById('navbar');
                 if (navEl) navEl.classList.remove('nav-hidden-mobile');
             });
