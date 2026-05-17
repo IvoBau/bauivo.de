@@ -47,7 +47,7 @@
             box-sizing: border-box;
         }
         html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
-        body { -webkit-font-smoothing: antialiased; overscroll-behavior-y: none; }
+        body { -webkit-font-smoothing: antialiased; overscroll-behavior-y: none; overflow-x: hidden; }
         img { max-width: 100%; height: auto; display: block; }
 
         /* ── NAVBAR ──────────────────────────────────────────────────── */
@@ -78,7 +78,16 @@
         /* Container-Sichtbarkeit wird per JS gesteuert (siehe unten) –
            nicht per CSS-Breakpoint, damit Desktop-Layout-Modus auf Touch-Geräten
            korrekt funktioniert. Standardmäßig beide versteckt. */
-        .snap-slider-wrap  { display: none; width: 100%; background: #1a1f2b; border-radius: 2px; overflow: hidden; position: relative; }
+        .snap-slider-wrap  {
+            display: none;
+            width: 100%;
+            max-width: 100%;
+            background: #1a1f2b;
+            border-radius: 2px;
+            overflow: hidden;
+            position: relative;
+            box-sizing: border-box;
+        }
         .swiper-slider-wrap { display: none; width: 100%; }
 
         /* Klassen die per JS gesetzt werden */
@@ -130,24 +139,30 @@
         .snap-dots {
             display: flex;
             justify-content: center;
+            align-items: center;
             gap: 6px;
-            padding: 8px 0;
+            padding: 10px 0;
             background: #1a1f2b;
+            line-height: 0;
         }
         .snap-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
+            width: 8px !important;
+            height: 8px !important;
+            min-height: 8px !important; /* Override der globalen 44px min-height für buttons */
+            min-width: 8px !important;
+            border-radius: 50% !important;
             background: rgba(255,255,255,0.35);
             border: none;
-            padding: 0;
+            padding: 0 !important;
             cursor: pointer;
             transition: background 0.25s, transform 0.25s;
             flex-shrink: 0;
+            display: block;
+            box-sizing: content-box;
         }
         .snap-dot.active {
             background: #d4af37;
-            transform: scale(1.2);
+            transform: scale(1.35);
         }
 
         /* Caption (optional, wie beim Original) */
@@ -248,7 +263,19 @@
         @media (max-width: 767px) { #sticky-cta { display: flex; } }
 
         @media (max-width: 380px) { #hero h1 { font-size: 1.75rem !important; } }
-        @media (max-width: 1023px) { .service-block > div { grid-column: span 12 !important; } }
+        @media (max-width: 1023px) {
+            .service-block {
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                width: 100% !important;
+            }
+            .service-block > div {
+                width: 100% !important;
+                max-width: 100% !important;
+                grid-column: span 12 !important;
+            }
+        }
         @media (max-width: 767px) { .process-line { display: none !important; } }
         @media (max-width: 767px) { .about-deco { display: none; } }
 
