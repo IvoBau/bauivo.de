@@ -653,32 +653,42 @@
                         <h3 class="font-serif text-2xl sm:text-4xl text-white mb-3 sm:mb-4">Bereit für Ihr Projekt?</h3>
                         <p class="text-gray-400 text-sm sm:text-base">Lassen Sie uns über Ihre Vorstellungen sprechen. Füllen Sie das Formular aus und wir melden uns zeitnah.</p>
                     </div>
-                    <div class="person-card bg-ivo-anthracite border border-white/5 rounded-sm overflow-hidden flex flex-row items-stretch">
-                        <div class="person-card-photo w-32 sm:w-44 flex-shrink-0">
-                            <img src="Pictures/ivoT.jpg" alt="Ivo Tunjić – Inhaber IvoBau" class="w-full h-full object-cover object-top" loading="lazy">
+                    <!-- Person Card – neues Design -->
+                    <div class="person-card-new bg-ivo-anthracite border border-white/8 rounded-lg overflow-hidden flex flex-row items-stretch" style="border-color: rgba(255,255,255,0.08);">
+                        <!-- Foto: quadratisch, etwas größer -->
+                        <div class="flex-shrink-0" style="width: 140px; min-height: 180px;">
+                            <img src="Pictures/ivoT.jpg" alt="Ivo Tunjić – Inhaber IvoBau"
+                                 style="width:140px; height:100%; object-fit:cover; object-position:top; display:block; min-height:180px;"
+                                 loading="lazy">
                         </div>
-                        <div class="flex flex-col justify-center p-4 sm:p-6 gap-3 sm:gap-5 min-w-0">
+                        <!-- Rechte Seite -->
+                        <div class="flex flex-col justify-center px-5 py-5 gap-4 min-w-0">
+                            <!-- Name & Titel -->
                             <div>
-                                <p class="text-white font-bold text-base sm:text-lg font-serif">Ivo Tunjić</p>
-                                <p class="text-ivo-gold text-xs sm:text-sm tracking-wide uppercase mt-0.5">Inhaber & Fachbetrieb</p>
-                                <div class="w-8 h-0.5 bg-ivo-gold mt-2 sm:mt-3"></div>
+                                <p class="text-white font-bold text-lg font-serif leading-tight">Ivo Tunjić</p>
+                                <p class="text-ivo-gold text-xs tracking-widest uppercase mt-1 font-semibold">Inhaber &amp; Fachbetrieb</p>
+                                <div class="w-8 h-0.5 bg-ivo-gold mt-2"></div>
                             </div>
-                            <a href="tel:015735255753" class="flex items-center gap-2 sm:gap-3 text-white hover:text-ivo-gold transition-colors group">
-                                <div class="w-9 h-9 sm:w-10 sm:h-10 bg-ivo-dark rounded-full flex items-center justify-center flex-shrink-0 border border-ivo-gold/30 group-hover:bg-ivo-gold/10 transition-colors">
-                                    <img src="icons/phone.svg" alt="Telefon" class="w-4 h-4 sm:w-5 sm:h-5">
+                            <!-- Telefon -->
+                            <a href="tel:015735255753" class="flex items-center gap-3 group">
+                                <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 transition-colors"
+                                     style="background: rgba(212,175,55,0.15); border: 1px solid rgba(212,175,55,0.35);">
+                                    <i data-lucide="phone" class="text-ivo-gold group-hover:scale-110 transition-transform" style="width:18px;height:18px;"></i>
                                 </div>
                                 <div>
-                                    <p class="text-xs text-gray-400">Telefon</p>
-                                    <p class="font-medium text-sm sm:text-base">0157 35255753</p>
+                                    <p class="text-gray-400 text-xs">Telefon</p>
+                                    <p class="text-ivo-gold font-semibold text-base leading-tight">0157 35255753</p>
                                 </div>
                             </a>
-                            <a href="mailto:bau.tunjic@gmail.com" class="flex items-center gap-2 sm:gap-3 text-white hover:text-ivo-gold transition-colors group">
-                                <div class="w-9 h-9 sm:w-10 sm:h-10 bg-ivo-dark rounded-full flex items-center justify-center flex-shrink-0 border border-ivo-gold/30 group-hover:bg-ivo-gold/10 transition-colors">
-                                    <img src="icons/mail.svg" alt="E-Mail" class="w-4 h-4 sm:w-5 sm:h-5">
+                            <!-- E-Mail -->
+                            <a href="mailto:bau.tunjic@gmail.com" class="flex items-center gap-3 group">
+                                <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 transition-colors"
+                                     style="background: rgba(212,175,55,0.15); border: 1px solid rgba(212,175,55,0.35);">
+                                    <i data-lucide="mail" class="text-ivo-gold group-hover:scale-110 transition-transform" style="width:18px;height:18px;"></i>
                                 </div>
                                 <div>
-                                    <p class="text-xs text-gray-400">E-Mail</p>
-                                    <p class="font-medium text-xs sm:text-base break-all">bau.tunjic@gmail.com</p>
+                                    <p class="text-gray-400 text-xs">E-Mail</p>
+                                    <p class="text-white font-medium text-sm leading-tight break-all">bau.tunjic@gmail.com</p>
                                 </div>
                             </a>
                         </div>
