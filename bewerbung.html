@@ -978,7 +978,7 @@
                 if (typeof emailjs === 'undefined') {
                     applyBtn.classList.remove('loading');
                     applyBtn.disabled = false;
-                    showStatus('error', 'Die Bewerbung konnte gerade nicht gesendet werden. Bitte später erneut versuchen oder direkt an bau.tunjic@gmail.com schreiben.');
+                    showStatus('error', 'EmailJS konnte nicht geladen werden. Bitte prüfe die Internetverbindung oder sende die Bewerbung direkt per E-Mail.');
                     return;
                 }
 
